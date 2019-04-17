@@ -1,9 +1,10 @@
 {
-    "name": "laravel/laravel",
+    "name": "devilrep/worlds-from-elements",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "The simple game",
     "keywords": [
-        "framework",
+        "elements",
+        "game",
         "laravel"
     ],
     "license": "MIT",
