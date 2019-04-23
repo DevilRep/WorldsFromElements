@@ -28,7 +28,7 @@ class Element extends Model
 
     public function createdElement()
     {
-        return $this->hasOne('App\Models\CreatedElement');
+        return $this->hasOne('App\Models\AvailableElement');
     }
 
     public function initialElement()

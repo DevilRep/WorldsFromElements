@@ -2,10 +2,10 @@
 
 /* @var $factory \Illuminate\Database\Eloquent\Factory */
 
-use App\Models\CreatedElement;
+use App\Models\AvailableElement;
 use Faker\Generator as Faker;
 
-$factory->define(CreatedElement::class, function (Faker $faker) {
+$factory->define(AvailableElement::class, function (Faker $faker) {
     return [
         //
     ];
