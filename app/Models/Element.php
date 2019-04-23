@@ -15,4 +15,14 @@ class Element extends Model
             'element_id'
         );
     }
+
+    public function components()
+    {
+        return $this->belongsToMany(
+            'App\Models\Element',
+            'recipes',
+            'element_id',
+            'component_id'
+        );
+    }
 }
