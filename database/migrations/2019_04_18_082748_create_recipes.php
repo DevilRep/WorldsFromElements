@@ -17,7 +17,6 @@ class CreateRecipes extends Migration
             $table->bigIncrements('id');
             $table->unsignedInteger('element_id');
             $table->unsignedInteger('component_id');
-            $table->timestamps();
 
             $table->foreign('element_id')->references('id')->on('elements')->onDelete('cascade');
             $table->foreign('component_id')->references('id')->on('elements')->onDelete('cascade');
