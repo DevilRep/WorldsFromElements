@@ -25,4 +25,9 @@ class Element extends Model
             'component_id'
         );
     }
+
+    public function createdElement()
+    {
+        return $this->hasOne('App\Models\CreatedElement');
+    }
 }
