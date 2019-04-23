@@ -8,6 +8,6 @@ class CreatedElement extends Model
 {
     public function element()
     {
-        return $this->hasOne('App\Models\Element');
+        return $this->belongsTo('App\Models\Element');
     }
 }

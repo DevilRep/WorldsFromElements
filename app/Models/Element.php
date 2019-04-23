@@ -30,4 +30,9 @@ class Element extends Model
     {
         return $this->hasOne('App\Models\CreatedElement');
     }
+
+    public function initialElement()
+    {
+        return $this->hasOne('App\Models\InitialElement');
+    }
 }

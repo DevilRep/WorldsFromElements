@@ -19,22 +19,20 @@ class Recipes extends Seeder
         $count_recipes = $faker->numberBetween(1, count($elements) - 1);
         for ($i = 0; $i < $count_recipes; $i++) {
             $count = $faker->numberBetween(1, count($elements) - 1);
-            $components = $this->groupById(Element::whereNotIn('id', [$elements[$i]->id])->get());
+            $components = array_column(
+                Element::whereNotIn('id', [$elements[$i]->id])->get()->all(),
+                null,
+                'id'
+            );
             while ($count) {
                 $component = $faker->randomElement($components);
+                /**
+                 * @var Element $elements[$i]
+                 */
                 $elements[$i]->components()->save($component);
                 unset($components[$component->id]);
                 $count--;
             }
         }
-    }
-
-    protected function groupById(Collection $data)
-    {
-        $elements = [];
-        foreach ($data->all() as $element) {
-            $elements[$element->id] = $element;
-        }
-        return $elements;
     }
 }
