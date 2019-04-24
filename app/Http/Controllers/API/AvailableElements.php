@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 use App\Models\AvailableElement;
 
-class Element extends Controller
+class AvailableElements extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +17,9 @@ class Element extends Controller
     public function index()
     {
         return response()->json([
-            'items' => AvailableElement::with('element')->get()
+            'items' => AvailableElement::with('element')->get()->map(function ($record) {
+                return $record->element;
+            })
         ]);
     }
 }

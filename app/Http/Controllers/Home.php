@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\AvailableElement;
 
 class Home extends Controller
 {
@@ -14,6 +15,6 @@ class Home extends Controller
      */
     public function __invoke(Request $request)
     {
-        return view('home');
+        return view('pages.home');
     }
 }

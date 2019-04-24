@@ -8,7 +8,37 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
-.navbar-laravel {
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+html, body  {
+  height: 100%;
+  margin: 0;
+}
+
+header, footer {
+  height: 50px;
+}
+
+nav.navbar {
+  background-color: $navbar;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+footer {
+  margin-top: auto;
+  background-color: $navbar;
+  text-align: center;
+  line-height: 50px;
+}
+
+#app > .container {
+  margin-top: 15px;
+}
+
+.element {
+  display: inline-block;
+  margin-right: 10px;
+  margin-bottom: 10px;
 }
