@@ -19,7 +19,7 @@ class AvailableElements extends Seeder
             /**
              * @var InitialElement $element
              */
-            $element->element()->first()->createdElement()->save(factory(AvailableElement::class)->make());
+            $element->element()->first()->availableElement()->save(factory(AvailableElement::class)->make());
         }
         $elements = array_column(
             Element::whereNotIn('id', array_keys($initial_elements))->get()->all(),
@@ -29,7 +29,7 @@ class AvailableElements extends Seeder
         $count_recipes = $faker->numberBetween(1, count($elements) - 1);
         for ($i = 0; $i < $count_recipes; $i++) {
             $selected = $faker->randomElement($elements);
-            $selected->createdElement()->save(factory(AvailableElement::class)->make());
+            $selected->availableElement()->save(factory(AvailableElement::class)->make());
             unset($elements[$selected->id]);
         }
     }
