@@ -11,6 +11,7 @@
 html, body  {
   height: 100%;
   margin: 0;
+  color: $text;
 }
 
 header, footer {
@@ -19,6 +20,11 @@ header, footer {
 
 nav.navbar {
   background-color: $navbar;
+}
+
+.navbar-light .navbar-nav .active > .nav-link,
+.navbar-light .navbar-brand {
+  color: $text;
 }
 
 body {

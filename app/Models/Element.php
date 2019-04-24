@@ -26,7 +26,7 @@ class Element extends Model
         );
     }
 
-    public function createdElement()
+    public function availableElement()
     {
         return $this->hasOne('App\Models\AvailableElement');
     }
