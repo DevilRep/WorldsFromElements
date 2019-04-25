@@ -16,11 +16,9 @@ class AvailableElements extends Controller
      */
     public function index()
     {
-        return response()->json([
-            'items' => AvailableElement::with('element')->get()->map(function ($record) {
+        return response()->json(AvailableElement::with('element')->get()->map(function ($record) {
                 return $record->element;
-            })
-        ]);
+            }));
     }
 
     public function newGame()

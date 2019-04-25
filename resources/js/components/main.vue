@@ -19,25 +19,22 @@
 
 <script>
     export default {
-        data () {
-            return {
-                elements: []
-            }
-        },
+        data: () => ({
+            elements: []
+        }),
         mounted() {
             this.all();
         },
         methods: {
             all() {
-                window.axios.get('/api/v1/elements/available')
+                window.axios.get('/api/v1/elements')
                     .then(function (response) {
-                        this.elements = response.data.items;
+                        this.elements = response.data;
                     }.bind(this))
                     .catch(error => {
                         console.log(error);
                     });
             },
-
             newGame() {
                 window.axios.post('/api/v1/elements/new-game')
                     .then(function (response) {
