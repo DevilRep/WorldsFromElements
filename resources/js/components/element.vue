@@ -1,9 +1,9 @@
 <template>
     <drop class="dropzone" @drop="makeElement">
-        <drag :transfer-data="transferData">
+        <drag class="drag" :transfer-data="transferData">
             <div class="card element">
                 <div class="card-body">
-                    <p class="card-text">{{ item.name }}</p>
+                    <p class="card-text">{{ item.name }} ({{ item.id }})</p>
                 </div>
             </div>
         </drag>
@@ -24,15 +24,10 @@
                 if (droppedOn === data) {
                     return;
                 }
-                let components = [
-                    data,
-                    droppedOn
-                ];
                 window.axios.post('/api/v1/elements', {
-                    components: components
+                    components: [data, droppedOn]
                 })
                     .then(result => {
-                        debugger;
                         this.$emit('elements:update', result.data);
                     })
             }

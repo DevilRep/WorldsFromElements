@@ -11,6 +11,7 @@
                         v-for="element in elements"
                         :key="element.id"
                         v-bind:item="element"
+                        v-on:elements:update="elementsUpdate"
                 ></element-component>
             </div>
         </div>
@@ -42,6 +43,9 @@
             },
             showError(error) {
                 console.log(error);
+            },
+            elementsUpdate(elements) {
+                this.elements = elements;
             }
         }
     }

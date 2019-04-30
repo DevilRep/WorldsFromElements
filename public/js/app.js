@@ -1792,12 +1792,9 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
-      var components = [data, droppedOn];
       window.axios.post('/api/v1/elements', {
-        components: components
+        components: [data, droppedOn]
       }).then(function (result) {
-        debugger;
-
         _this.$emit('elements:update', result.data);
       });
     }
@@ -1815,6 +1812,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
 //
 //
 //
@@ -1856,6 +1854,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     showError: function showError(error) {
       console.log(error);
+    },
+    elementsUpdate: function elementsUpdate(elements) {
+      this.elements = elements;
     }
   }
 });
@@ -37167,15 +37168,19 @@ var render = function() {
     "drop",
     { staticClass: "dropzone", on: { drop: _vm.makeElement } },
     [
-      _c("drag", { attrs: { "transfer-data": _vm.transferData } }, [
-        _c("div", { staticClass: "card element" }, [
-          _c("div", { staticClass: "card-body" }, [
-            _c("p", { staticClass: "card-text" }, [
-              _vm._v(_vm._s(_vm.item.name))
+      _c(
+        "drag",
+        { staticClass: "drag", attrs: { "transfer-data": _vm.transferData } },
+        [
+          _c("div", { staticClass: "card element" }, [
+            _c("div", { staticClass: "card-body" }, [
+              _c("p", { staticClass: "card-text" }, [
+                _vm._v(_vm._s(_vm.item.name) + " (" + _vm._s(_vm.item.id) + ")")
+              ])
             ])
           ])
-        ])
-      ])
+        ]
+      )
     ],
     1
   )
@@ -37292,7 +37297,8 @@ var render = function() {
         _vm._l(_vm.elements, function(element) {
           return _c("element-component", {
             key: element.id,
-            attrs: { item: element }
+            attrs: { item: element },
+            on: { "elements:update": _vm.elementsUpdate }
           })
         }),
         1
