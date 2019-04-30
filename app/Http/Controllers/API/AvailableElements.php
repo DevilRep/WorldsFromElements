@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Exceptions\ApplicationError;
+use App\Services\Elements;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
@@ -16,9 +18,7 @@ class AvailableElements extends Controller
      */
     public function index()
     {
-        return response()->json(AvailableElement::with('element')->get()->map(function ($record) {
-                return $record->element;
-            }));
+        return $this->availableElements();
     }
 
     public function newGame()
@@ -32,10 +32,30 @@ class AvailableElements extends Controller
             }
             AvailableElement::create(['element_id' => $element->element_id]);
         }
-        return response()->json([
-            'items' => AvailableElement::with('element')->get()->map(function ($record) {
-                return $record->element;
-            })
-        ]);
+        return $this->availableElements();
+    }
+
+    public function store(Request $request, Elements $element_service)
+    {
+        try {
+            $new_element_id = $element_service->searchRecipe($request->components);
+            AvailableElement::create(['element_id' => $new_element_id]);
+            return $this->availableElements();
+        } catch (ApplicationError $e) {
+            return response()
+                ->setStatusCode(400)
+                ->json(['error' => $e->getMessage()]);
+        } catch (\Exception $e) {
+            return response()
+                ->setStatusCode(500)
+                ->json(['error' => $e->getMessage()]);
+        }
+    }
+
+    protected function availableElements()
+    {
+        return response()->json(AvailableElement::with('element')->get()->map(function ($record) {
+            return $record->element;
+        }));
     }
 }

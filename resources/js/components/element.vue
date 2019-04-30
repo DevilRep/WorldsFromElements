@@ -15,12 +15,12 @@
         props: ['item'],
         computed: {
             transferData () {
-                return this.item.name;
+                return this.item.id;
             }
         },
         methods: {
             makeElement(data) {
-                let droppedOn = this.transferData();
+                let droppedOn = this.transferData;
                 if (droppedOn === data) {
                     return;
                 }

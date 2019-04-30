@@ -19,7 +19,7 @@ class AvailableElements extends Seeder
             /**
              * @var InitialElement $element
              */
-            $element->element()->first()->availableElement()->save(factory(AvailableElement::class)->make());
+            factory(AvailableElement::class)->make(['element_id' => $element->element_id]);
         }
         $elements = array_column(
             Element::whereNotIn('id', array_keys($initial_elements))->get()->all(),

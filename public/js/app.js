@@ -1779,14 +1779,14 @@ __webpack_require__.r(__webpack_exports__);
   props: ['item'],
   computed: {
     transferData: function transferData() {
-      return this.item.name;
+      return this.item.id;
     }
   },
   methods: {
     makeElement: function makeElement(data) {
       var _this = this;
 
-      var droppedOn = this.transferData();
+      var droppedOn = this.transferData;
 
       if (droppedOn === data) {
         return;
@@ -1847,16 +1847,15 @@ __webpack_require__.r(__webpack_exports__);
     all: function all() {
       window.axios.get('/api/v1/elements').then(function (response) {
         this.elements = response.data;
-      }.bind(this))["catch"](function (error) {
-        console.log(error);
-      });
+      }.bind(this))["catch"](this.showError.bind(this));
     },
     newGame: function newGame() {
       window.axios.post('/api/v1/elements/new-game').then(function (response) {
-        this.elements = response.data.items;
-      }.bind(this))["catch"](function (error) {
-        console.log(error);
-      });
+        this.elements = response.data;
+      }.bind(this))["catch"](this.showError.bind(this));
+    },
+    showError: function showError(error) {
+      console.log(error);
     }
   }
 });

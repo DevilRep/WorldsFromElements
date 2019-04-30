@@ -31,18 +31,17 @@
                     .then(function (response) {
                         this.elements = response.data;
                     }.bind(this))
-                    .catch(error => {
-                        console.log(error);
-                    });
+                    .catch(this.showError.bind(this));
             },
             newGame() {
                 window.axios.post('/api/v1/elements/new-game')
                     .then(function (response) {
-                        this.elements = response.data.items;
+                        this.elements = response.data;
                     }.bind(this))
-                    .catch(error => {
-                        console.log(error);
-                    });
+                    .catch(this.showError.bind(this));
+            },
+            showError(error) {
+                console.log(error);
             }
         }
     }
