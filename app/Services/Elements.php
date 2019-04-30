@@ -53,10 +53,13 @@ class Elements
             $recipes_of_components[$item->component_id][] = $item->element_id;
         });
 
-        $potencial_recipes = array_intersect(...$recipes_of_components);
+        if (count($recipes_of_components) < count($components)) {
+            throw new RecipeNotExist();
+        }
+        $potential_recipes = array_intersect(...$recipes_of_components);
         $recipes_components_count = Recipe::groupBy('element_id')
             ->select('element_id', DB::raw('count(*) as total'))
-            ->whereIn('element_id', $potencial_recipes)
+            ->whereIn('element_id', $potential_recipes)
             ->pluck('total', 'element_id')
             ->all();
 

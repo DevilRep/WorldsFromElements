@@ -39,16 +39,14 @@ class AvailableElements extends Controller
     {
         try {
             $new_element_id = $element_service->searchRecipe($request->components);
-            AvailableElement::create(['element_id' => $new_element_id]);
+            AvailableElement::firstOrCreate(['element_id' => $new_element_id]);
             return $this->availableElements();
         } catch (ApplicationError $e) {
             return response()
-                ->setStatusCode(400)
-                ->json(['error' => $e->getMessage()]);
+                ->json(['error' => $e->getMessage()], 400);
         } catch (\Exception $e) {
             return response()
-                ->setStatusCode(500)
-                ->json(['error' => $e->getMessage()]);
+                ->json(['error' => $e->getMessage()], 500);
         }
     }
 
