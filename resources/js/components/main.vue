@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row">
             <div class="col-12 text-right">
-                <button v-on:click="newGame" class="btn btn-outline-primary">New game</button>
+                <button v-on:click="newGame" class="btn btn-outline-primary new-game">New game</button>
             </div>
         </div>
         <div class="row justify-content-center">
