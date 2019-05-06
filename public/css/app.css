@@ -10705,3 +10705,12 @@ footer {
   margin-bottom: 10px;
 }
 
+.dropzone,
+.drag {
+  display: inline-block;
+}
+
+.new-game {
+  margin-bottom: 15px;
+}
+

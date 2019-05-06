@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row">
             <div class="col-12 text-right">
-                <button v-on:click="newGame" class="btn btn-outline-primary">New game</button>
+                <button v-on:click="newGame" class="btn btn-outline-primary new-game">New game</button>
             </div>
         </div>
         <div class="row justify-content-center">
@@ -11,6 +11,7 @@
                         v-for="element in elements"
                         :key="element.id"
                         v-bind:item="element"
+                        v-on:elements:update="elementsUpdate"
                 ></element-component>
             </div>
         </div>
@@ -19,33 +20,32 @@
 
 <script>
     export default {
-        data () {
-            return {
-                elements: []
-            }
-        },
+        data: () => ({
+            elements: []
+        }),
         mounted() {
             this.all();
         },
         methods: {
             all() {
-                window.axios.get('/api/v1/elements/available')
+                window.axios.get('/api/v1/elements')
                     .then(function (response) {
-                        this.elements = response.data.items;
+                        this.elements = response.data;
                     }.bind(this))
-                    .catch(error => {
-                        console.log(error);
-                    });
+                    .catch(this.showError.bind(this));
             },
-
             newGame() {
                 window.axios.post('/api/v1/elements/new-game')
                     .then(function (response) {
-                        this.elements = response.data.items;
+                        this.elements = response.data;
                     }.bind(this))
-                    .catch(error => {
-                        console.log(error);
-                    });
+                    .catch(this.showError.bind(this));
+            },
+            showError(error) {
+                console.log(error);
+            },
+            elementsUpdate(elements) {
+                this.elements = elements;
             }
         }
     }

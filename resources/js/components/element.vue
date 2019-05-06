@@ -1,13 +1,36 @@
 <template>
-    <div class="card element">
-        <div class="card-body">
-            <p class="card-text">{{ item.name }}</p>
-        </div>
-    </div>
+    <drop class="dropzone" @drop="makeElement">
+        <drag class="drag" :transfer-data="transferData">
+            <div class="card element">
+                <div class="card-body">
+                    <p class="card-text">{{ item.name }} ({{ item.id }})</p>
+                </div>
+            </div>
+        </drag>
+    </drop>
 </template>
 
 <script>
     export default {
-        props: ['item']
+        props: ['item'],
+        computed: {
+            transferData () {
+                return this.item.id;
+            }
+        },
+        methods: {
+            makeElement(data) {
+                let droppedOn = this.transferData;
+                if (droppedOn === data) {
+                    return;
+                }
+                window.axios.post('/api/v1/elements', {
+                    components: [data, droppedOn]
+                })
+                    .then(result => {
+                        this.$emit('elements:update', result.data);
+                    })
+            }
+        }
     }
 </script>

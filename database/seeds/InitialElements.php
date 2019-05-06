@@ -16,10 +16,10 @@ class InitialElements extends Seeder
     {
         $faker = Faker::create();
         $elements = array_column(Element::all()->all(), null, 'id');
-        $count_recipes = $faker->numberBetween(1, (count($elements) - 1) / 2);
+        $count_recipes = $faker->numberBetween(3, (count($elements) - 1) / 2);
         for ($i = 0; $i < $count_recipes; $i++) {
             $selected = $faker->randomElement($elements);
-            $selected->createdElement()->save(factory(InitialElement::class)->make());
+            $selected->availableElement()->save(factory(InitialElement::class)->make());
             unset($elements[$selected->id]);
         }
     }
