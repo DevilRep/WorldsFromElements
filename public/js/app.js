@@ -37282,7 +37282,7 @@ var render = function() {
         _c(
           "button",
           {
-            staticClass: "btn btn-outline-primary",
+            staticClass: "btn btn-outline-primary new-game",
             on: { click: _vm.newGame }
           },
           [_vm._v("New game")]
