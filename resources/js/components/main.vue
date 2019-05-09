@@ -11,40 +11,45 @@
                         v-for="element in elements"
                         :key="element.id"
                         v-bind:item="element"
-                        v-on:elements:update="elementsUpdate"
                 ></element-component>
             </div>
         </div>
+        <modal-component ref="modal"></modal-component>
     </div>
 </template>
 
 <script>
+    import { EventBus } from '../eventBus';
+
     export default {
         data: () => ({
             elements: []
         }),
         mounted() {
+            EventBus.$on('elements:update', this.updateElements);
+            EventBus.$on('modal:error:show', error => {
+                this.$refs.modal
+                    .init({
+                        icon: 'error',
+                        title: 'Error!',
+                        message: error.response.data.error
+                    })
+                    .open();
+            });
             this.all();
         },
         methods: {
             all() {
                 window.axios.get('/api/v1/elements')
-                    .then(function (response) {
-                        this.elements = response.data;
-                    }.bind(this))
-                    .catch(this.showError.bind(this));
+                    .then(response => this.updateElements(response.data))
+                    .catch(error => EventBus.$emit('modal:error:show', error));
             },
             newGame() {
                 window.axios.post('/api/v1/elements/new-game')
-                    .then(function (response) {
-                        this.elements = response.data;
-                    }.bind(this))
-                    .catch(this.showError.bind(this));
+                    .then(response => this.updateElements(response.data))
+                    .catch(error => EventBus.$emit('modal:error:show', error));
             },
-            showError(error) {
-                console.log(error);
-            },
-            elementsUpdate(elements) {
+            updateElements(elements) {
                 this.elements = elements;
             }
         }
