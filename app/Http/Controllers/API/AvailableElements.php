@@ -9,7 +9,7 @@ use App\Services\Elements;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
-use App\Models\{AvailableElement, InitialElement};
+use App\Models\{AvailableElement};
 
 class AvailableElements extends Controller
 {
@@ -23,32 +23,12 @@ class AvailableElements extends Controller
         return $this->availableElements();
     }
 
-    public function newGame()
-    {
-        $initial_elements = array_column(InitialElement::all()->all(), null, 'element_id');
-        AvailableElement::whereNotIn('id', array_keys($initial_elements))->delete();
-        $available = array_column(AvailableElement::all()->all(), null, 'element_id');
-        foreach ($initial_elements as $element) {
-            if (isset($available[$element->element_id])) {
-                continue;
-            }
-            AvailableElement::create(['element_id' => $element->element_id]);
-        }
-        return $this->availableElements();
-    }
-
     public function store(Request $request, Elements $element_service)
     {
         try {
             $new_element_id = $element_service->searchRecipe($request->components);
             AvailableElement::firstOrCreate(['element_id' => $new_element_id]);
-            $elements = AvailableElement::with('element')->get()->map(function ($record) {
-                return $record->element;
-            });
-            return response()->json([
-                'elements' => $elements,
-                'end' => count($elements) === count($element_service->usedElements())
-            ]);
+            return $this->availableElements();
         } catch (ElementNotExist $e) {
             return response()
                 ->json(['error' => $e->getMessage()], 404);

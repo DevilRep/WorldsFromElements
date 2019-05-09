@@ -26,7 +26,7 @@
         data: () => ({
             elements: [],
             draggable: false,
-            newGameAvailable: true
+            newGameAvailable: false
         }),
         mounted() {
             EventBus.$on('elements:update', this.updateElements);
@@ -39,34 +39,40 @@
                     })
                     .open()
             );
-            EventBus.$on('elements:check', end => {
-                if (!end) {
-                    return;
-                }
-                this.$refs.modal
-                    .init({
-                        type: 'success',
-                        title: 'Congratulations!',
-                        message: 'You won the game! Well done!'
+            EventBus.$on('game:check', () =>
+                window.axios.get('/api/v1/game')
+                    .then(result => {
+                        this.newGameAvailable = !result.data.new;
+                        if (!result.data.end) {
+                            return;
+                        }
+                        this.$refs.modal
+                            .init({
+                                type: 'success',
+                                title: 'Congratulations!',
+                                message: 'You won the game! Well done!'
+                            })
+                            .open();
+                        EventBus.$emit('elements:draggable:off');
                     })
-                    .open();
-                EventBus.$emit('elements:draggable:off');
-            });
+                    .catch(error => EventBus.$emit('modal:error:show', error))
+            );
             EventBus.$on('elements:draggable:off', () => this.draggable = false);
             EventBus.$on('elements:draggable:on', () => this.draggable = true);
-            EventBus.$on('newGame:on', () => {
+            EventBus.$on('game:new:on', () => {
                 if (this.newGameAvailable) {
                     return;
                 }
                 this.newGameAvailable = true;
             });
-            EventBus.$on('newGame:off', () => {
+            EventBus.$on('game:new:off', () => {
                 if (!this.newGameAvailable) {
                     return;
                 }
                 this.newGameAvailable = false
             });
             this.all();
+            EventBus.$emit('game:check');
         },
         methods: {
             all() {
@@ -78,9 +84,10 @@
                     .catch(error => EventBus.$emit('modal:error:show', error));
             },
             newGame() {
-                window.axios.post('/api/v1/elements/new-game')
+                window.axios.post('/api/v1/game')
                     .then(response => {
-                        EventBus.$emit('newGame:off');
+                        //EventBus.$emit('game:new:off');
+                        EventBus.$emit('game:check');
                         this.updateElements(response.data);
                         EventBus.$emit('elements:draggable:on');
                     })

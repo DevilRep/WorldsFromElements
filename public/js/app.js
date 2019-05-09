@@ -1795,9 +1795,9 @@ __webpack_require__.r(__webpack_exports__);
       window.axios.post('/api/v1/elements', {
         components: [data, droppedOn]
       }).then(function (result) {
-        _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$emit('elements:update', result.data.elements);
-        _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$emit('elements:check', result.data.end);
-        _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$emit('newGame:on');
+        _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$emit('elements:update', result.data);
+        _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$emit('game:check');
+        _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$emit('game:new:on');
       })["catch"](function (error) {
         return _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$emit('modal:error:show', error);
       });
@@ -1844,7 +1844,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       elements: [],
       draggable: false,
-      newGameAvailable: true
+      newGameAvailable: false
     };
   },
   mounted: function mounted() {
@@ -1858,18 +1858,24 @@ __webpack_require__.r(__webpack_exports__);
         message: error.response.data.error
       }).open();
     });
-    _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$on('elements:check', function (end) {
-      if (!end) {
-        return;
-      }
+    _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$on('game:check', function () {
+      return window.axios.get('/api/v1/game').then(function (result) {
+        _this.newGameAvailable = !result.data["new"];
 
-      _this.$refs.modal.init({
-        type: 'success',
-        title: 'Congratulations!',
-        message: 'You won the game! Well done!'
-      }).open();
+        if (!result.data.end) {
+          return;
+        }
 
-      _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$emit('elements:draggable:off');
+        _this.$refs.modal.init({
+          type: 'success',
+          title: 'Congratulations!',
+          message: 'You won the game! Well done!'
+        }).open();
+
+        _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$emit('elements:draggable:off');
+      })["catch"](function (error) {
+        return _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$emit('modal:error:show', error);
+      });
     });
     _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$on('elements:draggable:off', function () {
       return _this.draggable = false;
@@ -1877,14 +1883,14 @@ __webpack_require__.r(__webpack_exports__);
     _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$on('elements:draggable:on', function () {
       return _this.draggable = true;
     });
-    _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$on('newGame:on', function () {
+    _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$on('game:new:on', function () {
       if (_this.newGameAvailable) {
         return;
       }
 
       _this.newGameAvailable = true;
     });
-    _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$on('newGame:off', function () {
+    _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$on('game:new:off', function () {
       if (!_this.newGameAvailable) {
         return;
       }
@@ -1892,6 +1898,7 @@ __webpack_require__.r(__webpack_exports__);
       _this.newGameAvailable = false;
     });
     this.all();
+    _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$emit('game:check');
   },
   methods: {
     all: function all() {
@@ -1908,8 +1915,9 @@ __webpack_require__.r(__webpack_exports__);
     newGame: function newGame() {
       var _this3 = this;
 
-      window.axios.post('/api/v1/elements/new-game').then(function (response) {
-        _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$emit('newGame:off');
+      window.axios.post('/api/v1/game').then(function (response) {
+        //EventBus.$emit('game:new:off');
+        _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$emit('game:check');
 
         _this3.updateElements(response.data);
 
