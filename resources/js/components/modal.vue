@@ -1,5 +1,5 @@
 <template>
-    <sweet-modal :icon="icon" :title="title" ref="modal">
+    <sweet-modal :icon="type" :class="type" :title="title" ref="modal">
         {{ message }}
     </sweet-modal>
 </template>
@@ -10,12 +10,12 @@
     export default {
         data: () => ({
             message: '',
-            icon: '',
+            type: '',
             title: ''
         }),
         methods: {
             init(data) {
-                ['icon', 'message', 'title'].forEach(element => {
+                ['type', 'message', 'title'].forEach(element => {
                     if (!data[element]) {
                         return;
                     }

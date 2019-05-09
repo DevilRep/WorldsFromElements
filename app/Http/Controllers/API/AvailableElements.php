@@ -42,7 +42,13 @@ class AvailableElements extends Controller
         try {
             $new_element_id = $element_service->searchRecipe($request->components);
             AvailableElement::firstOrCreate(['element_id' => $new_element_id]);
-            return $this->availableElements();
+            $elements = AvailableElement::with('element')->get()->map(function ($record) {
+                return $record->element;
+            });
+            return response()->json([
+                'elements' => $elements,
+                'end' => count($elements) === count($element_service->usedElements())
+            ]);
         } catch (ElementNotExist $e) {
             return response()
                 ->json(['error' => $e->getMessage()], 404);

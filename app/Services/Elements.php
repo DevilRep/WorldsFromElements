@@ -71,4 +71,14 @@ class Elements
 
         throw new RecipeNotExist();
     }
+
+    public function usedElements()
+    {
+        $elements = [];
+        Recipe::with(['element', 'component'])->get()->map(function($recipe) use (&$elements) {
+            $elements[$recipe->element->id] = $recipe->element->name;
+            $elements[$recipe->component->id] = $recipe->component->name;
+        });
+        return $elements;
+    }
 }

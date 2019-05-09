@@ -57,27 +57,54 @@ footer {
   margin-bottom: 15px;
 }
 
-.sweet-modal.theme-light {
+.sweet-modal-overlay.error .sweet-modal.theme-light {
   .sweet-title {
-    background-color: $modal-background-title;
-    color: $modal-title;
-  }
-
-  .sweet-title > h2 {
-    line-height: 64px;
-  }
-
-  .sweet-content {
-    background-color: $modal-background-body;
-    color: $modal-body;
+    background-color: $modal-error-background-title;
+    color: $modal-error-title;
   }
 
   .sweet-box-actions .sweet-action-close {
-    color: $modal-title;
+    color: $modal-error-title;
 
     &:hover {
-      background: $modal-title;
-      color: $modal-background-title;
+      background: $modal-error-title;
+      color: $modal-error-background-title;
     }
   }
+
+  .sweet-content {
+    background-color: $modal-error-background-body;
+    color: $modal-error-body;
+  }
+}
+
+.sweet-modal-overlay.success .sweet-modal.theme-light {
+  .sweet-title {
+    background-color: $modal-success-background-title;
+    color: $modal-success-title;
+  }
+
+ .sweet-box-actions .sweet-action-close {
+   color: $modal-success-title;
+
+   &:hover {
+     background: $modal-success-title;
+     color: $modal-success-background-title;
+   }
+ }
+
+  .sweet-content {
+    background-color: $modal-success-background-body;
+    color: $modal-success-body;
+  }
+}
+
+.sweet-modal.theme-light {
+  .sweet-title > h2 {
+    line-height: 64px;
+  }
+}
+
+.controls-wrapper {
+  height: 52px;
 }
