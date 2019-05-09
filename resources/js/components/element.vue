@@ -11,6 +11,8 @@
 </template>
 
 <script>
+    import { EventBus } from '../eventBus';
+
     export default {
         props: ['item'],
         computed: {
@@ -24,12 +26,9 @@
                 if (droppedOn === data) {
                     return;
                 }
-                window.axios.post('/api/v1/elements', {
-                    components: [data, droppedOn]
-                })
-                    .then(result => {
-                        this.$emit('elements:update', result.data);
-                    })
+                window.axios.post('/api/v1/elements', { components: [data, droppedOn] })
+                    .then(result => EventBus.$emit('elements:update', result.data))
+                    .catch(error => EventBus.$emit('modal:error:show', error))
             }
         }
     }

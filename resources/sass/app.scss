@@ -56,3 +56,28 @@ footer {
 .new-game {
   margin-bottom: 15px;
 }
+
+.sweet-modal.theme-light {
+  .sweet-title {
+    background-color: $modal-background-title;
+    color: $modal-title;
+  }
+
+  .sweet-title > h2 {
+    line-height: 64px;
+  }
+
+  .sweet-content {
+    background-color: $modal-background-body;
+    color: $modal-body;
+  }
+
+  .sweet-box-actions .sweet-action-close {
+    color: $modal-title;
+
+    &:hover {
+      background: $modal-title;
+      color: $modal-background-title;
+    }
+  }
+}

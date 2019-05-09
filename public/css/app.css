@@ -10714,3 +10714,26 @@ footer {
   margin-bottom: 15px;
 }
 
+.sweet-modal.theme-light .sweet-title {
+  background-color: #38c172;
+  color: #fff;
+}
+
+.sweet-modal.theme-light .sweet-title > h2 {
+  line-height: 64px;
+}
+
+.sweet-modal.theme-light .sweet-content {
+  background-color: #fff;
+  color: #38c172;
+}
+
+.sweet-modal.theme-light .sweet-box-actions .sweet-action-close {
+  color: #fff;
+}
+
+.sweet-modal.theme-light .sweet-box-actions .sweet-action-close:hover {
+  background: #fff;
+  color: #38c172;
+}
+

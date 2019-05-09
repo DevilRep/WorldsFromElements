@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Exceptions\ApplicationError;
+use App\Exceptions\ElementNotExist;
+use App\Exceptions\RecipeNotExist;
 use App\Services\Elements;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -41,9 +43,15 @@ class AvailableElements extends Controller
             $new_element_id = $element_service->searchRecipe($request->components);
             AvailableElement::firstOrCreate(['element_id' => $new_element_id]);
             return $this->availableElements();
+        } catch (ElementNotExist $e) {
+            return response()
+                ->json(['error' => $e->getMessage()], 404);
+        } catch (RecipeNotExist $e) {
+            return response()
+                ->json(['error' => $e->getMessage()], 404);
         } catch (ApplicationError $e) {
             return response()
-                ->json(['error' => $e->getMessage()], 400);
+                ->json(['error' => $e->getMessage()], 422);
         } catch (\Exception $e) {
             return response()
                 ->json(['error' => $e->getMessage()], 500);
