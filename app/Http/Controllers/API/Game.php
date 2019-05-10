@@ -39,7 +39,7 @@ class Game extends Controller
             'new' => count($elements) === $initial_count,
             'progress' => [
                 'current' => $created_count,
-                'all' => $recipes_count
+                'max' => $recipes_count
             ]
         ]);
     }

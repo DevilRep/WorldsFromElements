@@ -75,13 +75,13 @@ class Elements
     public function createdElementsCount()
     {
         // TODO: could be optimized be using a cache
-        $available_elements = array_column(AvailableElement::all(), 'element_id');
-        return Recipe::whereIn('element_id', $available_elements)->count();
+        $available_elements = array_column(AvailableElement::all()->all(), 'element_id');
+        return Recipe::whereIn('element_id', $available_elements)->select(['element_id'])->distinct()->count('element_id');
     }
 
     public function recipesCount()
     {
         // TODO: must be a cache!
-        return Recipe::query()->count();
+        return Recipe::query()->select(['element_id'])->distinct()->count('element_id');
     }
 }

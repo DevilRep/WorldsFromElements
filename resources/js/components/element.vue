@@ -32,7 +32,7 @@
                         EventBus.$emit('game:check');
                         EventBus.$emit('game:new:on');
                     })
-                    .catch(error => EventBus.$emit('modal:error:show', error))
+                    .catch(error => EventBus.$emit('modal:error:show', error.response.data))
             }
         }
     }
