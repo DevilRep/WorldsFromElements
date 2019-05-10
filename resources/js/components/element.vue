@@ -1,6 +1,6 @@
 <template>
     <drop class="dropzone" @drop="makeElement">
-        <drag class="drag" :transfer-data="transferData">
+        <drag class="drag" :transfer-data="transferData" :draggable="draggable">
             <div class="card element">
                 <div class="card-body">
                     <p class="card-text">{{ item.name }} ({{ item.id }})</p>
@@ -14,7 +14,7 @@
     import { EventBus } from '../eventBus';
 
     export default {
-        props: ['item'],
+        props: ['item', 'draggable'],
         computed: {
             transferData () {
                 return this.item.id;
@@ -27,7 +27,11 @@
                     return;
                 }
                 window.axios.post('/api/v1/elements', { components: [data, droppedOn] })
-                    .then(result => EventBus.$emit('elements:update', result.data))
+                    .then(result => {
+                        EventBus.$emit('elements:update', result.data);
+                        EventBus.$emit('game:check');
+                        EventBus.$emit('game:new:on');
+                    })
                     .catch(error => EventBus.$emit('modal:error:show', error))
             }
         }

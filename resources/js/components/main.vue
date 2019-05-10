@@ -1,8 +1,8 @@
 <template>
     <div class="container">
         <div class="row">
-            <div class="col-12 text-right">
-                <button v-on:click="newGame" class="btn btn-outline-primary new-game">New game</button>
+            <div class="col-12 text-right controls-wrapper">
+                <button v-if="newGameAvailable" v-on:click="newGame" class="btn btn-outline-primary new-game">New game</button>
             </div>
         </div>
         <div class="row justify-content-center">
@@ -11,6 +11,7 @@
                         v-for="element in elements"
                         :key="element.id"
                         v-bind:item="element"
+                        v-bind:draggable="draggable"
                 ></element-component>
             </div>
         </div>
@@ -23,30 +24,73 @@
 
     export default {
         data: () => ({
-            elements: []
+            elements: [],
+            draggable: false,
+            newGameAvailable: false
         }),
         mounted() {
             EventBus.$on('elements:update', this.updateElements);
-            EventBus.$on('modal:error:show', error => {
+            EventBus.$on('modal:error:show', error =>
                 this.$refs.modal
                     .init({
-                        icon: 'error',
+                        type: 'error',
                         title: 'Error!',
                         message: error.response.data.error
                     })
-                    .open();
+                    .open()
+            );
+            EventBus.$on('game:check', () =>
+                window.axios.get('/api/v1/game')
+                    .then(result => {
+                        this.newGameAvailable = !result.data.new;
+                        if (!result.data.end) {
+                            return;
+                        }
+                        this.$refs.modal
+                            .init({
+                                type: 'success',
+                                title: 'Congratulations!',
+                                message: 'You won the game! Well done!'
+                            })
+                            .open();
+                        EventBus.$emit('elements:draggable:off');
+                    })
+                    .catch(error => EventBus.$emit('modal:error:show', error))
+            );
+            EventBus.$on('elements:draggable:off', () => this.draggable = false);
+            EventBus.$on('elements:draggable:on', () => this.draggable = true);
+            EventBus.$on('game:new:on', () => {
+                if (this.newGameAvailable) {
+                    return;
+                }
+                this.newGameAvailable = true;
+            });
+            EventBus.$on('game:new:off', () => {
+                if (!this.newGameAvailable) {
+                    return;
+                }
+                this.newGameAvailable = false
             });
             this.all();
+            EventBus.$emit('game:check');
         },
         methods: {
             all() {
                 window.axios.get('/api/v1/elements')
-                    .then(response => this.updateElements(response.data))
+                    .then(response => {
+                        this.updateElements(response.data);
+                        EventBus.$emit('elements:draggable:on');
+                    })
                     .catch(error => EventBus.$emit('modal:error:show', error));
             },
             newGame() {
-                window.axios.post('/api/v1/elements/new-game')
-                    .then(response => this.updateElements(response.data))
+                window.axios.post('/api/v1/game')
+                    .then(response => {
+                        //EventBus.$emit('game:new:off');
+                        EventBus.$emit('game:check');
+                        this.updateElements(response.data);
+                        EventBus.$emit('elements:draggable:on');
+                    })
                     .catch(error => EventBus.$emit('modal:error:show', error));
             },
             updateElements(elements) {

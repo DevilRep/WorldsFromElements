@@ -1778,7 +1778,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['item'],
+  props: ['item', 'draggable'],
   computed: {
     transferData: function transferData() {
       return this.item.id;
@@ -1795,7 +1795,9 @@ __webpack_require__.r(__webpack_exports__);
       window.axios.post('/api/v1/elements', {
         components: [data, droppedOn]
       }).then(function (result) {
-        return _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$emit('elements:update', result.data);
+        _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$emit('elements:update', result.data);
+        _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$emit('game:check');
+        _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$emit('game:new:on');
       })["catch"](function (error) {
         return _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$emit('modal:error:show', error);
       });
@@ -1835,11 +1837,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      elements: []
+      elements: [],
+      draggable: false,
+      newGameAvailable: false
     };
   },
   mounted: function mounted() {
@@ -1847,20 +1852,62 @@ __webpack_require__.r(__webpack_exports__);
 
     _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$on('elements:update', this.updateElements);
     _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$on('modal:error:show', function (error) {
-      _this.$refs.modal.init({
-        icon: 'error',
+      return _this.$refs.modal.init({
+        type: 'error',
         title: 'Error!',
         message: error.response.data.error
       }).open();
     });
+    _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$on('game:check', function () {
+      return window.axios.get('/api/v1/game').then(function (result) {
+        _this.newGameAvailable = !result.data["new"];
+
+        if (!result.data.end) {
+          return;
+        }
+
+        _this.$refs.modal.init({
+          type: 'success',
+          title: 'Congratulations!',
+          message: 'You won the game! Well done!'
+        }).open();
+
+        _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$emit('elements:draggable:off');
+      })["catch"](function (error) {
+        return _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$emit('modal:error:show', error);
+      });
+    });
+    _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$on('elements:draggable:off', function () {
+      return _this.draggable = false;
+    });
+    _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$on('elements:draggable:on', function () {
+      return _this.draggable = true;
+    });
+    _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$on('game:new:on', function () {
+      if (_this.newGameAvailable) {
+        return;
+      }
+
+      _this.newGameAvailable = true;
+    });
+    _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$on('game:new:off', function () {
+      if (!_this.newGameAvailable) {
+        return;
+      }
+
+      _this.newGameAvailable = false;
+    });
     this.all();
+    _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$emit('game:check');
   },
   methods: {
     all: function all() {
       var _this2 = this;
 
       window.axios.get('/api/v1/elements').then(function (response) {
-        return _this2.updateElements(response.data);
+        _this2.updateElements(response.data);
+
+        _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$emit('elements:draggable:on');
       })["catch"](function (error) {
         return _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$emit('modal:error:show', error);
       });
@@ -1868,8 +1915,13 @@ __webpack_require__.r(__webpack_exports__);
     newGame: function newGame() {
       var _this3 = this;
 
-      window.axios.post('/api/v1/elements/new-game').then(function (response) {
-        return _this3.updateElements(response.data);
+      window.axios.post('/api/v1/game').then(function (response) {
+        //EventBus.$emit('game:new:off');
+        _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$emit('game:check');
+
+        _this3.updateElements(response.data);
+
+        _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$emit('elements:draggable:on');
       })["catch"](function (error) {
         return _eventBus__WEBPACK_IMPORTED_MODULE_0__["EventBus"].$emit('modal:error:show', error);
       });
@@ -1903,7 +1955,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       message: '',
-      icon: '',
+      type: '',
       title: ''
     };
   },
@@ -1911,7 +1963,7 @@ __webpack_require__.r(__webpack_exports__);
     init: function init(data) {
       var _this = this;
 
-      ['icon', 'message', 'title'].forEach(function (element) {
+      ['type', 'message', 'title'].forEach(function (element) {
         if (!data[element]) {
           return;
         }
@@ -38864,7 +38916,10 @@ var render = function() {
     [
       _c(
         "drag",
-        { staticClass: "drag", attrs: { "transfer-data": _vm.transferData } },
+        {
+          staticClass: "drag",
+          attrs: { "transfer-data": _vm.transferData, draggable: _vm.draggable }
+        },
         [
           _c("div", { staticClass: "card element" }, [
             _c("div", { staticClass: "card-body" }, [
@@ -38975,15 +39030,17 @@ var render = function() {
     { staticClass: "container" },
     [
       _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-12 text-right" }, [
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-outline-primary new-game",
-              on: { click: _vm.newGame }
-            },
-            [_vm._v("New game")]
-          )
+        _c("div", { staticClass: "col-12 text-right controls-wrapper" }, [
+          _vm.newGameAvailable
+            ? _c(
+                "button",
+                {
+                  staticClass: "btn btn-outline-primary new-game",
+                  on: { click: _vm.newGame }
+                },
+                [_vm._v("New game")]
+              )
+            : _vm._e()
         ])
       ]),
       _vm._v(" "),
@@ -38994,7 +39051,7 @@ var render = function() {
           _vm._l(_vm.elements, function(element) {
             return _c("element-component", {
               key: element.id,
-              attrs: { item: element }
+              attrs: { item: element, draggable: _vm.draggable }
             })
           }),
           1
@@ -39030,7 +39087,11 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "sweet-modal",
-    { ref: "modal", attrs: { icon: _vm.icon, title: _vm.title } },
+    {
+      ref: "modal",
+      class: _vm.type,
+      attrs: { icon: _vm.type, title: _vm.title }
+    },
     [_vm._v("\n    " + _vm._s(_vm.message) + "\n")]
   )
 }
