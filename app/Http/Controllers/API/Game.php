@@ -32,9 +32,15 @@ class Game extends Controller
             return $record->element;
         });
         $initial_count = InitialElement::query()->count();
+        $created_count = $element_service->createdElementsCount();
+        $recipes_count = $element_service->recipesCount();
         return response()->json([
-            'end' => count($elements) === count($element_service->usedElements()),
-            'new' => count($elements) === $initial_count
+            'end' => $created_count === $recipes_count,
+            'new' => count($elements) === $initial_count,
+            'progress' => [
+                'current' => $created_count,
+                'all' => $recipes_count
+            ]
         ]);
     }
 }
