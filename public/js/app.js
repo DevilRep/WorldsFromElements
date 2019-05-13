@@ -2024,6 +2024,13 @@ __webpack_require__.r(__webpack_exports__);
       this.end();
     }
   },
+  computed: {
+    styles: function styles() {
+      return {
+        width: Math.round(this.current / this.max * 100) + '%'
+      };
+    }
+  },
   methods: {
     start: function start() {
       this.current = this.min;
@@ -39187,7 +39194,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "progress-bar" }, [
-    _c("span", { staticClass: "value" }),
+    _c("span", { staticClass: "value", style: _vm.styles }),
     _vm._v(" "),
     _c("span", { staticClass: "title" }, [
       _vm._v(_vm._s(_vm.current) + " / " + _vm._s(_vm.max))

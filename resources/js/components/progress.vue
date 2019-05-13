@@ -1,6 +1,6 @@
 <template>
     <div class="progress-bar">
-        <span class="value"></span>
+        <span class="value" v-bind:style="styles"></span>
         <span class="title">{{ current }} / {{ max }}</span>
     </div>
 </template>
@@ -17,6 +17,13 @@
             }
             if (this.current > this.max) {
                 this.end();
+            }
+        },
+        computed: {
+            styles() {
+                return {
+                    width: Math.round(this.current / this.max * 100) + '%'
+                };
             }
         },
         methods: {
