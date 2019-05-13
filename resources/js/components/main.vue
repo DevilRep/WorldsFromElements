@@ -2,6 +2,7 @@
     <div class="container">
         <div class="row">
             <div class="col-12 text-right controls-wrapper">
+                <progress-component :max="maxRecipes" min="0" ref="progress"></progress-component>
                 <button v-if="newGameAvailable" v-on:click="newGame" class="btn btn-outline-primary new-game">New game</button>
             </div>
         </div>
@@ -26,23 +27,28 @@
         data: () => ({
             elements: [],
             draggable: false,
-            newGameAvailable: false
+            newGameAvailable: false,
+            maxRecipes: 0
         }),
         mounted() {
             EventBus.$on('elements:update', this.updateElements);
-            EventBus.$on('modal:error:show', error =>
+            EventBus.$on('modal:error:show', error => {
                 this.$refs.modal
                     .init({
                         type: 'error',
                         title: 'Error!',
-                        message: error.response.data.error
+                        message: error.error
                     })
                     .open()
-            );
+            });
             EventBus.$on('game:check', () =>
                 window.axios.get('/api/v1/game')
                     .then(result => {
                         this.newGameAvailable = !result.data.new;
+                        this.$refs.progress.set(result.data.progress.current);
+                        if (!this.maxRecipes) {
+                            this.maxRecipes = result.data.progress.max;
+                        }
                         if (!result.data.end) {
                             return;
                         }
@@ -55,7 +61,7 @@
                             .open();
                         EventBus.$emit('elements:draggable:off');
                     })
-                    .catch(error => EventBus.$emit('modal:error:show', error))
+                    .catch(error => EventBus.$emit('modal:error:show', error.response.data))
             );
             EventBus.$on('elements:draggable:off', () => this.draggable = false);
             EventBus.$on('elements:draggable:on', () => this.draggable = true);
@@ -81,7 +87,7 @@
                         this.updateElements(response.data);
                         EventBus.$emit('elements:draggable:on');
                     })
-                    .catch(error => EventBus.$emit('modal:error:show', error));
+                    .catch(error => EventBus.$emit('modal:error:show', error.response.data));
             },
             newGame() {
                 window.axios.post('/api/v1/game')
@@ -91,7 +97,7 @@
                         this.updateElements(response.data);
                         EventBus.$emit('elements:draggable:on');
                     })
-                    .catch(error => EventBus.$emit('modal:error:show', error));
+                    .catch(error => EventBus.$emit('modal:error:show', error.response.data));
             },
             updateElements(elements) {
                 this.elements = elements;

@@ -72,13 +72,16 @@ class Elements
         throw new RecipeNotExist();
     }
 
-    public function usedElements()
+    public function createdElementsCount()
     {
-        $elements = [];
-        Recipe::with(['element', 'component'])->get()->map(function($recipe) use (&$elements) {
-            $elements[$recipe->element->id] = $recipe->element->name;
-            $elements[$recipe->component->id] = $recipe->component->name;
-        });
-        return $elements;
+        // TODO: could be optimized be using a cache
+        $available_elements = array_column(AvailableElement::all()->all(), 'element_id');
+        return Recipe::whereIn('element_id', $available_elements)->select(['element_id'])->distinct()->count('element_id');
+    }
+
+    public function recipesCount()
+    {
+        // TODO: must be a cache!
+        return Recipe::query()->select(['element_id'])->distinct()->count('element_id');
     }
 }

@@ -5470,7 +5470,7 @@ a.badge-dark.focus {
   height: 1rem;
   overflow: hidden;
   font-size: 0.675rem;
-  background-color: #e9ecef;
+  background-color: #9CE9BB;
   border-radius: 0.25rem;
 }
 
@@ -10758,5 +10758,36 @@ footer {
 
 .controls-wrapper {
   height: 52px;
+}
+
+.progress-bar {
+  width: 100%;
+  position: relative;
+  height: 37px;
+  border-radius: 0.25em;
+  background-color: #9CE9BB;
+  border: 1px solid #38c172;
+}
+
+.progress-bar .title {
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  height: 100%;
+  line-height: 37px;
+}
+
+.progress-bar .value {
+  height: 100%;
+  background-color: #38c172;
+  display: block;
+  border-radius: 0.25em;
+}
+
+.controls-wrapper {
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: auto 100px;
 }
 

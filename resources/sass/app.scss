@@ -108,3 +108,34 @@ footer {
 .controls-wrapper {
   height: 52px;
 }
+
+.progress-bar {
+  width: 100%;
+  position: relative;
+  height: 37px;
+  border-radius: 0.25em;
+  background-color: $progress-bg;
+  border: 1px solid $progress-border-color;
+
+  .title {
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 0;
+    height: 100%;
+    line-height: 37px;
+  }
+
+  .value {
+    height: 100%;
+    background-color: $progress-bar-bg;
+    display: block;
+    border-radius: 0.25em;
+  }
+}
+
+.controls-wrapper {
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: auto 100px;
+}
