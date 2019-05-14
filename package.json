@@ -25,6 +25,7 @@
     },
     "dependencies": {
         "sweet-modal-vue": "^2.0.0",
-        "vue-drag-drop": "^1.1.4"
+        "vue-drag-drop": "^1.1.4",
+        "vue-router": "^3.0.6"
     }
 }
