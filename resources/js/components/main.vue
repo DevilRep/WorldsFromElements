@@ -17,6 +17,7 @@
             </div>
         </div>
         <modal-component ref="modal"></modal-component>
+        <passport-clients></passport-clients>
     </div>
 </template>
 
@@ -42,7 +43,7 @@
                     .open()
             });
             EventBus.$on('game:check', () =>
-                window.axios.get('/api/v1/game')
+                window.axios.get('/api/game')
                     .then(result => {
                         this.newGameAvailable = !result.data.new;
                         this.$refs.progress.set(result.data.progress.current);
@@ -82,7 +83,7 @@
         },
         methods: {
             all() {
-                window.axios.get('/api/v1/elements')
+                window.axios.get('/api/elements')
                     .then(response => {
                         this.updateElements(response.data);
                         EventBus.$emit('elements:draggable:on');
@@ -90,9 +91,8 @@
                     .catch(error => EventBus.$emit('modal:error:show', error.response.data));
             },
             newGame() {
-                window.axios.post('/api/v1/game')
+                window.axios.post('/api/game')
                     .then(response => {
-                        //EventBus.$emit('game:new:off');
                         EventBus.$emit('game:check');
                         this.updateElements(response.data);
                         EventBus.$emit('elements:draggable:on');
