@@ -21,6 +21,7 @@ class ClearAll extends Seeder
         InitialElement::truncate();
         Recipe::truncate();
         Element::truncate();
+        Users::truncate();
         DB::statement('SET foreign_key_checks=1');
     }
 }
