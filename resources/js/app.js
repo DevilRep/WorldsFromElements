@@ -22,7 +22,7 @@ files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0] + '-com
 
 Vue.use(require('vue-drag-drop'));
 
-const app = new Vue({
-    el: '#app'
+new Vue({
+    el: '#app',
+    router: require('./routes').default
 });
-

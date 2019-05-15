@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="page main">
         <div class="row">
             <div class="col-12 text-right controls-wrapper">
                 <progress-component :max="maxRecipes" min="0" ref="progress"></progress-component>
@@ -17,7 +17,6 @@
             </div>
         </div>
         <modal-component ref="modal"></modal-component>
-        <passport-clients></passport-clients>
     </div>
 </template>
 

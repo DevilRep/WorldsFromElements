@@ -2,5 +2,7 @@
 
 @section('content')
     <header-component></header-component>
-    <main-component></main-component>
+    <div class="container">
+        <router-view></router-view>
+    </div>
 @endsection
