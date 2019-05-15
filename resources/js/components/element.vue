@@ -26,7 +26,7 @@
                 if (droppedOn === data) {
                     return;
                 }
-                window.axios.post('/api/v1/elements', { components: [data, droppedOn] })
+                window.axios.post('/api/elements', { components: [data, droppedOn] })
                     .then(result => {
                         EventBus.$emit('elements:update', result.data);
                         EventBus.$emit('game:check');
