@@ -31,16 +31,16 @@ class AvailableElements extends Controller
             return $this->availableElements();
         } catch (ElementNotExist $e) {
             return response()
-                ->json(['error' => $e->getMessage()], 404);
+                ->json(['message' => $e->getMessage()], 404);
         } catch (RecipeNotExist $e) {
             return response()
-                ->json(['error' => $e->getMessage()], 404);
+                ->json(['message' => $e->getMessage()], 404);
         } catch (ApplicationError $e) {
             return response()
-                ->json(['error' => $e->getMessage()], 422);
+                ->json(['message' => $e->getMessage()], 422);
         } catch (\Exception $e) {
             return response()
-                ->json(['error' => $e->getMessage()], 500);
+                ->json(['message' => $e->getMessage()], 500);
         }
     }
 

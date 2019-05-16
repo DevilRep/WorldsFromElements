@@ -9,10 +9,17 @@
                     </div>
                     <div class="row password-wrapper">
                         <label class="label" for="password">Password</label>
-                        <input type="text" class="password form-control" id="password" v-model="password">
+                        <div class="input-group mb-2">
+                            <input v-bind:type="passwordFieldType" class="password form-control" id="password" v-model="password">
+                            <div class="input-group-append">
+                                <div class="input-group-text" v-on:click="togglePassword">
+                                    <i class="fa" v-bind:class="passwordIconClasses" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="row text-right">
-                        <button v-on:click="login">Log in</button>
+                    <div class="row controls-wrapper">
+                        <button class="btn btn-primary mx-auto" v-on:click="login">Log in</button>
                     </div>
                 </div>
             </div>
@@ -24,7 +31,22 @@
     import { EventBus } from '../eventBus';
 
     export default {
-        data: () => ({ username: '', password: ''}),
+        data: () => ({
+            username: '',
+            password: '',
+            showPassword: false
+        }),
+        computed: {
+            passwordIconClasses() {
+                return {
+                    'fa-eye-slash': this.showPassword,
+                    'fa-eye': !this.showPassword
+                };
+            },
+            passwordFieldType() {
+                return this.showPassword ? 'text' : 'password';
+            }
+        },
         methods: {
             login() {
                 window.axios.post('/api/login', {
@@ -32,12 +54,20 @@
                         password: this.password
                     })
                     .then(result => {
-                        console.log(result);
+                        EventBus.$emit('modal:message:show', {
+                            type: 'success',
+                            title: 'Excellent!',
+                            message: 'You are logged in'
+                        });
+                        EventBus.$emit('token:update', result.data);
                     })
                     .catch(error => {
                         EventBus.$emit('modal:error:show', error.response.data)
                     });
-            }
+            },
+            togglePassword() {
+                this.showPassword = !this.showPassword;
+            },
         }
     }
 </script>

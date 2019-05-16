@@ -130,7 +130,7 @@ footer {
   }
 }
 
-.controls-wrapper {
+.page.game .controls-wrapper {
   display: grid;
   grid-gap: 10px;
   grid-template-columns: auto 100px;
@@ -138,21 +138,26 @@ footer {
 }
 
 .page.login .card-body {
-  .username-wrapper {
-
-    margin-bottom: 15px;
-  }
-
-  .row {
+  .username-wrapper,
+  .password-wrapper {
     display: grid;
     grid-gap: 10px;
     grid-template-columns: 100px auto;
+    margin-bottom: 15px;
 
     .label {
       line-height: 1.6;
       margin-bottom: 0;
       padding: 0.375rem 0.75rem;
       text-align: right;
+    }
+  }
+
+  .password-wrapper .input-group-append {
+    cursor: pointer;
+
+    .input-group-text {
+      width: 44px;
     }
   }
 }
