@@ -54466,7 +54466,7 @@ files.keys().map(function (key) {
 Vue.use(__webpack_require__(/*! vue-drag-drop */ "./node_modules/vue-drag-drop/dist/vue-drag-drop.common.js"));
 new Vue({
   el: '#app',
-  router: __webpack_require__(/*! ./routes */ "./resources/js/routes.js")["default"]
+  router: __webpack_require__(/*! ./router-init */ "./resources/js/router-init.js")["default"]
 });
 
 /***/ }),
@@ -55162,6 +55162,50 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/router-init.js":
+/*!*************************************!*\
+  !*** ./resources/js/router-init.js ***!
+  \*************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
+/* harmony import */ var _middlewares__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./middlewares */ "./resources/js/middlewares/index.js");
+/* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./routes */ "./resources/js/routes.js");
+
+
+
+
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]);
+var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
+  routes: _routes__WEBPACK_IMPORTED_MODULE_3__["default"],
+  mode: 'history'
+});
+router.beforeEach(function (to, from, next) {
+  if (!to.meta.middlewares) {
+    next();
+  }
+
+  var promise = Promise.resolve();
+  to.meta.middlewares.forEach(function (middleware) {
+    return promise = promise.then(function () {
+      return new Promise(function (resolve, reject) {
+        _middlewares__WEBPACK_IMPORTED_MODULE_2__["default"][middleware](function (result) {
+          return result ? reject(result) : resolve();
+        }, from, router, to);
+      });
+    });
+  });
+  promise.then(next)["catch"](next);
+});
+/* harmony default export */ __webpack_exports__["default"] = (router);
+
+/***/ }),
+
 /***/ "./resources/js/routes.js":
 /*!********************************!*\
   !*** ./resources/js/routes.js ***!
@@ -55171,62 +55215,25 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
-/* harmony import */ var _components_game__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/game */ "./resources/js/components/game.vue");
-/* harmony import */ var _components_login__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/login */ "./resources/js/components/login.vue");
-/* harmony import */ var _components_not_found__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/not-found */ "./resources/js/components/not-found.vue");
-/* harmony import */ var _middlewares__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./middlewares */ "./resources/js/middlewares/index.js");
+/* harmony import */ var _components_game__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/game */ "./resources/js/components/game.vue");
+/* harmony import */ var _components_login__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/login */ "./resources/js/components/login.vue");
+/* harmony import */ var _components_not_found__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/not-found */ "./resources/js/components/not-found.vue");
 
 
 
-
-
-
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]);
-var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
-  routes: [{
-    path: '/',
-    component: _components_game__WEBPACK_IMPORTED_MODULE_2__["default"],
-    meta: {
-      middlewares: ['test1', 'test2']
-    }
-  }, {
-    path: '/login',
-    component: _components_login__WEBPACK_IMPORTED_MODULE_3__["default"]
-  }, {
-    path: '*',
-    component: _components_not_found__WEBPACK_IMPORTED_MODULE_4__["default"]
-  }],
-  mode: 'history'
-});
-
-var runMiddlewares = function runMiddlewares(middlewares, from, router, to) {
-  var promise = Promise.resolve();
-  middlewares.forEach(function (middleware) {
-    return promise = promise.then(function () {
-      return new Promise(function (resolve, reject) {
-        _middlewares__WEBPACK_IMPORTED_MODULE_5__["default"][middleware](function (result) {
-          return result ? reject(result) : resolve();
-        }, from, router, to);
-      });
-    });
-  });
-  return promise;
-};
-
-router.beforeEach(function (to, from, next) {
-  if (!to.meta.middlewares) {
-    next();
+/* harmony default export */ __webpack_exports__["default"] = ([{
+  path: '/',
+  component: _components_game__WEBPACK_IMPORTED_MODULE_0__["default"],
+  meta: {
+    middlewares: ['test1', 'test2']
   }
-
-  runMiddlewares(to.meta.middlewares, from, router, to).then(function () {
-    debugger;
-    next();
-  })["catch"](next);
-});
-/* harmony default export */ __webpack_exports__["default"] = (router);
+}, {
+  path: '/login',
+  component: _components_login__WEBPACK_IMPORTED_MODULE_1__["default"]
+}, {
+  path: '*',
+  component: _components_not_found__WEBPACK_IMPORTED_MODULE_2__["default"]
+}]);
 
 /***/ }),
 
