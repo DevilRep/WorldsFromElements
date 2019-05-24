@@ -9,5 +9,5 @@ Vue.use(require('vue-drag-drop'));
 
 new Vue({
     el: '#app',
-    router: require('./router-init').default
+    router: require('./router').default
 });

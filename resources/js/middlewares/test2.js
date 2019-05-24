@@ -1,4 +1,4 @@
-export default function(next) {
+export default function(req, next) {
     setTimeout(() => {
         alert('test2');
         next();
