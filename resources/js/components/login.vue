@@ -13,7 +13,7 @@
                             <input v-bind:type="passwordFieldType" class="password form-control" id="password" v-model="password">
                             <div class="input-group-append">
                                 <div class="input-group-text" v-on:click="togglePassword">
-                                    <i class="fa" v-bind:class="passwordIconClasses" aria-hidden="true"></i>
+                                    <i class="fa" :class="passwordIconClasses" aria-hidden="true"></i>
                                 </div>
                             </div>
                         </div>
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-    import { EventBus } from '../eventBus';
+    import EventBus from '../eventBus';
 
     export default {
         data: () => ({

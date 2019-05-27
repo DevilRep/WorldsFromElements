@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import availableMiddlewares from './middlewares';
 import routes from './routes';
+import EventBus from './eventBus';
 
 Vue.use(Router);
 
@@ -29,11 +30,14 @@ function runMiddlewares(middlewares, to, from, next) {
 }
 
 router.beforeEach((to, from, next) => {
+    EventBus.$emit('loader:show');
     if (!to.meta.middlewares) {
         return next();
     }
     let middlewares = to.meta.middlewares.slice();
     runMiddlewares(middlewares, to, from, next);
 });
+
+router.afterEach(() => EventBus.$emit('loader:hide'));
 
 export default router;

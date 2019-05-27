@@ -20,7 +20,7 @@
 </template>
 
 <script>
-    import { EventBus } from '../eventBus';
+    import EventBus from '../eventBus';
 
     export default {
         data: () => ({

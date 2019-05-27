@@ -10812,3 +10812,27 @@ footer {
   width: 44px;
 }
 
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9001;
+  font-size: 4em;
+  -webkit-font-smoothing: antialiased;
+  background: rgba(255, 255, 255, 0.9);
+  opacity: 0;
+  transition: opacity 0.3s;
+  -webkit-transform: translate3D(0, 0, 0);
+          transform: translate3D(0, 0, 0);
+  -webkit-perspective: 500px;
+  color: #38c172;
+  text-align: center;
+  line-height: 100vh;
+}
+
+.loader.is-visible {
+  opacity: 1;
+}
+
