@@ -21,6 +21,16 @@ function runMiddlewares(middlewares, to, from, next) {
             if (result instanceof Error) {
                 return next(result);
             }
+            if (result) {
+                if (
+                    typeof result === 'string' && result === from.path ||
+                    typeof result === 'object' && result.path === from.path
+                ) {
+                    EventBus.$emit('loader:hide');
+                    return next(false);
+                }
+                return next(result);
+            }
             middlewares.shift();
             runMiddlewares(middlewares, to, from, next);
         },
@@ -29,7 +39,16 @@ function runMiddlewares(middlewares, to, from, next) {
     );
 }
 
+let isRouterEnded = false;
+EventBus.$on('router:load:check', () => {
+    if (isRouterEnded) {
+        return EventBus.$emit('router:loaded');
+    }
+    EventBus.$emit('router:loading');
+});
+
 router.beforeEach((to, from, next) => {
+    isRouterEnded = false;
     EventBus.$emit('loader:show');
     if (!to.meta.middlewares) {
         return next();
@@ -38,6 +57,9 @@ router.beforeEach((to, from, next) => {
     runMiddlewares(middlewares, to, from, next);
 });
 
-router.afterEach(() => EventBus.$emit('loader:hide'));
+router.afterEach(() => {
+    isRouterEnded = true;
+    EventBus.$emit('loader:hide')
+});
 
 export default router;

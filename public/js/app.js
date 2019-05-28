@@ -2080,9 +2080,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data() {
-    return {};
-  },
   mounted: function mounted() {
     var _this = this;
 
@@ -2095,6 +2092,10 @@ __webpack_require__.r(__webpack_exports__);
     _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('loader:hide', function () {
       return _this.$refs.loader.hide();
     });
+    _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$once('router:loaded', function () {
+      return _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('loader:hide');
+    });
+    _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('router:load:check');
   },
   methods: {
     showError: function showError(error) {
@@ -55238,8 +55239,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var map = {
 	"./auth.js": "./resources/js/middlewares/auth.js",
-	"./index.js": "./resources/js/middlewares/index.js",
-	"./test2.js": "./resources/js/middlewares/test2.js"
+	"./index.js": "./resources/js/middlewares/index.js"
 };
 
 
@@ -55274,14 +55274,11 @@ webpackContext.id = "./resources/js/middlewares sync recursive \\.js$/";
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = (function (req, next) {
-  /*if (window.axios.defaults.headers.common.Authorization) {
-      return next();
-  }*/
-  ///next({ path: '/login' });
-  setTimeout(function () {
-    alert('1');
-    next();
-  }, 1000);
+  if (window.axios.defaults.headers.common.Authorization) {
+    return next();
+  }
+
+  next('/login');
 });
 
 /***/ }),
@@ -55310,24 +55307,6 @@ files.keys().map(function (key) {
 
 /***/ }),
 
-/***/ "./resources/js/middlewares/test2.js":
-/*!*******************************************!*\
-  !*** ./resources/js/middlewares/test2.js ***!
-  \*******************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (function (req, next) {
-  setTimeout(function () {
-    alert('test2');
-    next();
-  }, 4000);
-});
-
-/***/ }),
-
 /***/ "./resources/js/router.js":
 /*!********************************!*\
   !*** ./resources/js/router.js ***!
@@ -55343,6 +55322,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _middlewares__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./middlewares */ "./resources/js/middlewares/index.js");
 /* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./routes */ "./resources/js/routes.js");
 /* harmony import */ var _eventBus__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./eventBus */ "./resources/js/eventBus.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 
 
 
@@ -55364,12 +55345,30 @@ function runMiddlewares(middlewares, to, from, next) {
       return next(result);
     }
 
+    if (result) {
+      if (typeof result === 'string' && result === from.path || _typeof(result) === 'object' && result.path === from.path) {
+        _eventBus__WEBPACK_IMPORTED_MODULE_4__["default"].$emit('loader:hide');
+        return next(false);
+      }
+
+      return next(result);
+    }
+
     middlewares.shift();
     runMiddlewares(middlewares, to, from, next);
   }, router, to);
 }
 
+var isRouterEnded = false;
+_eventBus__WEBPACK_IMPORTED_MODULE_4__["default"].$on('router:load:check', function () {
+  if (isRouterEnded) {
+    return _eventBus__WEBPACK_IMPORTED_MODULE_4__["default"].$emit('router:loaded');
+  }
+
+  _eventBus__WEBPACK_IMPORTED_MODULE_4__["default"].$emit('router:loading');
+});
 router.beforeEach(function (to, from, next) {
+  isRouterEnded = false;
   _eventBus__WEBPACK_IMPORTED_MODULE_4__["default"].$emit('loader:show');
 
   if (!to.meta.middlewares) {
@@ -55380,7 +55379,8 @@ router.beforeEach(function (to, from, next) {
   runMiddlewares(middlewares, to, from, next);
 });
 router.afterEach(function () {
-  return _eventBus__WEBPACK_IMPORTED_MODULE_4__["default"].$emit('loader:hide');
+  isRouterEnded = true;
+  _eventBus__WEBPACK_IMPORTED_MODULE_4__["default"].$emit('loader:hide');
 });
 /* harmony default export */ __webpack_exports__["default"] = (router);
 
@@ -55405,7 +55405,7 @@ __webpack_require__.r(__webpack_exports__);
   path: '/',
   component: _components_game__WEBPACK_IMPORTED_MODULE_0__["default"],
   meta: {
-    middlewares: ['auth', 'test2']
+    middlewares: ['auth']
   }
 }, {
   path: '/login',

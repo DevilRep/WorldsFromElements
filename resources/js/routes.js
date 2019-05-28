@@ -8,7 +8,7 @@ export default [
         component: Game,
         meta: {
             middlewares: [
-                'auth', 'test2'
+                'auth'
             ]
         }
     },
