@@ -24,7 +24,7 @@
                 this.showMessage({
                     type: 'error',
                     title: 'Error!',
-                    message: error.message
+                    message: error
                 });
             },
             showMessage(data) {

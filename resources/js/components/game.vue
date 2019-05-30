@@ -47,7 +47,7 @@
                         this.updateElements(response.data);
                         EventBus.$emit('elements:draggable:on');
                     })
-                    .catch(error => EventBus.$emit('modal:error:show', error.response.data));
+                    .catch(error => EventBus.$emit('modal:error:show', error.response.data.message));
             },
             newGame() {
                 window.axios.post('/api/game')
@@ -56,7 +56,7 @@
                         this.updateElements(response.data);
                         EventBus.$emit('elements:draggable:on');
                     })
-                    .catch(error => EventBus.$emit('modal:error:show', error.response.data));
+                    .catch(error => EventBus.$emit('modal:error:show', error.response.data.message));
             },
             updateElements(elements) {
                 this.elements = elements;
@@ -79,7 +79,7 @@
                         });
                         EventBus.$emit('elements:draggable:off');
                     })
-                    .catch(error => EventBus.$emit('modal:error:show', error.response.data))
+                    .catch(error => EventBus.$emit('modal:error:show', error.response.data.message))
             },
             enableNewGame() {
                 if (this.newGameAvailable) {

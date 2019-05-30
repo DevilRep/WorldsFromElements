@@ -1,5 +1,6 @@
 import Game from './components/game'
 import Login from './components/login'
+import Signup from './components/signup';
 import NotFound from './components/not-found';
 
 export default [
@@ -15,6 +16,10 @@ export default [
     {
         path: '/login',
         component: Login
+    },
+    {
+        path: '/signup',
+        component: Signup
     },
     {
         path: '*',

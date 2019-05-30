@@ -10788,7 +10788,7 @@ footer {
   height: 52px;
 }
 
-.page.login .card-body .username-wrapper,
+.page.login .card-body .email-wrapper,
 .page.login .card-body .password-wrapper {
   display: grid;
   grid-gap: 10px;
@@ -10796,7 +10796,7 @@ footer {
   margin-bottom: 15px;
 }
 
-.page.login .card-body .username-wrapper .label,
+.page.login .card-body .email-wrapper .label,
 .page.login .card-body .password-wrapper .label {
   line-height: 1.6;
   margin-bottom: 0;
