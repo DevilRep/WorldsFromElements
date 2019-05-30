@@ -10756,10 +10756,6 @@ footer {
   line-height: 64px;
 }
 
-.controls-wrapper {
-  height: 52px;
-}
-
 .progress-bar {
   width: 100%;
   position: relative;
@@ -10785,9 +10781,58 @@ footer {
   border-radius: 0.25em;
 }
 
-.controls-wrapper {
+.page.game .controls-wrapper {
   display: grid;
   grid-gap: 10px;
   grid-template-columns: auto 100px;
+  height: 52px;
+}
+
+.page.login .card-body .username-wrapper,
+.page.login .card-body .password-wrapper {
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: 100px auto;
+  margin-bottom: 15px;
+}
+
+.page.login .card-body .username-wrapper .label,
+.page.login .card-body .password-wrapper .label {
+  line-height: 1.6;
+  margin-bottom: 0;
+  padding: 0.375rem 0.75rem;
+  text-align: right;
+}
+
+.page.login .card-body .password-wrapper .input-group-append {
+  cursor: pointer;
+}
+
+.page.login .card-body .password-wrapper .input-group-append .input-group-text {
+  width: 44px;
+}
+
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9001;
+  font-size: 4em;
+  -webkit-font-smoothing: antialiased;
+  background: rgba(255, 255, 255, 0.9);
+  opacity: 0;
+  transition: opacity 0.3s;
+  -webkit-transform: translate3D(0, 0, 0);
+          transform: translate3D(0, 0, 0);
+  -webkit-perspective: 500px;
+  color: #38c172;
+  text-align: center;
+  line-height: 100vh;
+}
+
+.loader.is-visible {
+  opacity: 1;
 }
 

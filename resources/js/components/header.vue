@@ -15,7 +15,10 @@
         <div class="collapse navbar-collapse" id="menu">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a href="#" class="nav-link">Home</a>
+                    <router-link to="/" class="nav-link">Home</router-link>
+                </li>
+                <li class="nav-item active">
+                    <router-link to="/login" class="nav-link">Login</router-link>
                 </li>
             </ul>
         </div>
