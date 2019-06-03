@@ -3,7 +3,6 @@
         <div class="row">
             <div class="col-12 text-right controls-wrapper">
                 <progress-component :max="maxRecipes" min="0" ref="progress"></progress-component>
-                <button v-if="newGameAvailable" v-on:click="newGame" class="btn btn-outline-primary new-game">New game</button>
             </div>
         </div>
         <div class="row justify-content-center">
@@ -26,7 +25,6 @@
         data: () => ({
             elements: [],
             draggable: false,
-            newGameAvailable: false,
             maxRecipes: 0
         }),
         mounted() {
@@ -34,8 +32,7 @@
             EventBus.$on('game:progress', this.progress);
             EventBus.$on('elements:draggable:off', () => this.draggable = false);
             EventBus.$on('elements:draggable:on', () => this.draggable = true);
-            EventBus.$on('game:new:on', this.enableNewGame);
-            EventBus.$on('game:new:off', this.disableNewGame);
+            EventBus.$on('game:new', this.newGame);
 
             EventBus.$emit('game:progress');
             this.all();
@@ -55,6 +52,7 @@
                         EventBus.$emit('game:progress');
                         this.updateElements(response.data);
                         EventBus.$emit('elements:draggable:on');
+                        EventBus.$emit('game:new:off');
                     })
                     .catch(error => EventBus.$emit('modal:error:show', error.response.data.message));
             },
@@ -80,18 +78,6 @@
                         EventBus.$emit('elements:draggable:off');
                     })
                     .catch(error => EventBus.$emit('modal:error:show', error.response.data.message))
-            },
-            enableNewGame() {
-                if (this.newGameAvailable) {
-                    return;
-                }
-                this.newGameAvailable = true;
-            },
-            disableNewGame() {
-                if (!this.newGameAvailable) {
-                    return;
-                }
-                this.newGameAvailable = false;
             }
         }
     }
