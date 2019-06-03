@@ -1,3 +1,3 @@
 <?php
 
-Route::get('/{any?}', 'Home')->where('any', '.*');
+Route::any('/{any?}', 'Home')->where('any', '.*');

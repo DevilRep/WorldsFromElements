@@ -170,13 +170,13 @@ sup {
 }
 
 a {
-  color: #38c172;
+  color: #fff;
   text-decoration: none;
   background-color: transparent;
 }
 
 a:hover {
-  color: #27864f;
+  color: #d9d9d9;
   text-decoration: underline;
 }
 
@@ -3154,12 +3154,12 @@ fieldset:disabled a.btn {
 
 .btn-link {
   font-weight: 400;
-  color: #38c172;
+  color: #fff;
   text-decoration: none;
 }
 
 .btn-link:hover {
-  color: #27864f;
+  color: #d9d9d9;
   text-decoration: underline;
 }
 
@@ -5034,14 +5034,14 @@ input[type=button].btn-block {
   padding: 0.5rem 0.75rem;
   margin-left: -1px;
   line-height: 1.25;
-  color: #38c172;
+  color: #fff;
   background-color: #fff;
   border: 1px solid #dee2e6;
 }
 
 .page-link:hover {
   z-index: 2;
-  color: #27864f;
+  color: #d9d9d9;
   text-decoration: none;
   background-color: #e9ecef;
   border-color: #dee2e6;
@@ -10788,27 +10788,41 @@ footer {
   height: 52px;
 }
 
-.page.login .card-body .username-wrapper,
-.page.login .card-body .password-wrapper {
+.page.game .controls-wrapper .link {
+  color: #fff;
+}
+
+.page.login .card-body .email-wrapper,
+.page.login .card-body .name-wrapper,
+.page.login .card-body .password-wrapper,
+.page.signup .card-body .email-wrapper,
+.page.signup .card-body .name-wrapper,
+.page.signup .card-body .password-wrapper {
   display: grid;
   grid-gap: 10px;
-  grid-template-columns: 100px auto;
+  grid-template-columns: 150px auto;
   margin-bottom: 15px;
 }
 
-.page.login .card-body .username-wrapper .label,
-.page.login .card-body .password-wrapper .label {
+.page.login .card-body .email-wrapper .label,
+.page.login .card-body .name-wrapper .label,
+.page.login .card-body .password-wrapper .label,
+.page.signup .card-body .email-wrapper .label,
+.page.signup .card-body .name-wrapper .label,
+.page.signup .card-body .password-wrapper .label {
   line-height: 1.6;
   margin-bottom: 0;
   padding: 0.375rem 0.75rem;
   text-align: right;
 }
 
-.page.login .card-body .password-wrapper .input-group-append {
+.page.login .card-body .password-wrapper .input-group-append,
+.page.signup .card-body .password-wrapper .input-group-append {
   cursor: pointer;
 }
 
-.page.login .card-body .password-wrapper .input-group-append .input-group-text {
+.page.login .card-body .password-wrapper .input-group-append .input-group-text,
+.page.signup .card-body .password-wrapper .input-group-append .input-group-text {
   width: 44px;
 }
 

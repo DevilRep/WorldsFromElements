@@ -11,7 +11,7 @@
 html, body  {
   height: 100%;
   margin: 0;
-  color: $text;
+  color: $text-color;
 }
 
 header, footer {
@@ -24,7 +24,7 @@ nav.navbar {
 
 .navbar-light .navbar-nav .active > .nav-link,
 .navbar-light .navbar-brand {
-  color: $text;
+  color: $text-color;
 }
 
 body {
@@ -135,14 +135,20 @@ footer {
   grid-gap: 10px;
   grid-template-columns: auto 100px;
   height: 52px;
+
+  .link {
+    color: $link-color;
+  }
 }
 
-.page.login .card-body {
-  .username-wrapper,
+.page.login .card-body,
+.page.signup .card-body {
+  .email-wrapper,
+  .name-wrapper,
   .password-wrapper {
     display: grid;
     grid-gap: 10px;
-    grid-template-columns: 100px auto;
+    grid-template-columns: 150px auto;
     margin-bottom: 15px;
 
     .label {
@@ -176,7 +182,7 @@ footer {
   transition: opacity 0.3s;
   transform: translate3D(0, 0, 0);
   -webkit-perspective: 500px;
-  color: $loader-text;
+  color: $loader-text-color;
   text-align: center;
   line-height: 100vh;
 

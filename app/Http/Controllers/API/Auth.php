@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use GuzzleHttp\Client as Guzzle;
 use GuzzleHttp\Exception\BadResponseException;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class Auth extends Controller
 {
@@ -18,7 +22,7 @@ class Auth extends Controller
                     'grant_type' => 'password',
                     'client_id' => config('services.passport.client_id'),
                     'client_secret' => config('services.passport.client_secret'),
-                    'username' => $request->username,
+                    'username' => $request->email,
                     'password' => $request->password
                 ]
             ]);
@@ -32,5 +36,22 @@ class Auth extends Controller
             }
             return response()->json(['message' => 'Something went wrong on the server'], $exception->getCode());
         }
+    }
+
+    public function signup(Request $request)
+    {
+        try {
+            $validated = Validator::make($request->all(), [
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+                'password' => ['required', 'string', 'min:8'],
+            ])->validate();
+        } catch (ValidationException $exception) {
+            return response()->json(['message' => $exception->validator->errors()->all()[0]], 422);
+        }
+        User::create(array_merge($validated, [
+            'password' => Hash::make($validated['password']),
+        ]));
+        return $this->login($request);
     }
 }
