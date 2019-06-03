@@ -49,7 +49,7 @@
                 ) {
                     return;
                 }
-                window.axios.post('/api/signup', {
+                window.axios.post('/api/user/signup', {
                     name: this.name,
                     email: this.email,
                     password: this.password
@@ -61,6 +61,7 @@
                             message: 'You are singed in'
                         });
                         EventBus.$emit('token:update', result.data);
+                        EventBus.$emit('user:info');
                         this.$router.push({ name: 'home' });
                     })
                     .catch(error => EventBus.$emit('modal:error:show', error.response.data.message));

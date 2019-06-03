@@ -18,6 +18,9 @@
                     <a href="#" class="nav-link" v-on:click="newGame">New game</a>
                 </li>
             </ul>
+            <ul v-if="user" class="navbar-nav">
+                <li class="nav-item">{{ this.user.name }}</li>
+            </ul>
         </div>
     </nav>
 </template>
@@ -28,10 +31,12 @@
     export default {
         data: () => ({
             newGameAvailable: false,
+            user: null
         }),
         mounted() {
             EventBus.$on('game:new:on', this.enableNewGame);
             EventBus.$on('game:new:off', this.disableNewGame);
+            EventBus.$on('user:info', this.loadUserInfo);
         },
         methods: {
             newGame() {
@@ -48,6 +53,14 @@
                     return;
                 }
                 this.newGameAvailable = false;
+            },
+            loadUserInfo() {
+                window.axios.get('/api/user/info')
+                    .then(result => {
+                        debugger;
+                        this.user = result.data;
+                    })
+                    .catch(error => EventBus.$emit('modal:error:show', error.response.data.message));
             }
         }
     }

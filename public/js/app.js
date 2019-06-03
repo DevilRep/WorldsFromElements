@@ -2044,16 +2044,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      newGameAvailable: false
+      newGameAvailable: false,
+      user: null
     };
   },
   mounted: function mounted() {
     _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('game:new:on', this.enableNewGame);
     _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('game:new:off', this.disableNewGame);
+    _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('user:info', this.loadUserInfo);
   },
   methods: {
     newGame: function newGame() {
@@ -2072,6 +2077,16 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       this.newGameAvailable = false;
+    },
+    loadUserInfo: function loadUserInfo() {
+      var _this = this;
+
+      window.axios.get('/api/user/info').then(function (result) {
+        debugger;
+        _this.user = result.data;
+      })["catch"](function (error) {
+        return _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('modal:error:show', error.response.data.message);
+      });
     }
   }
 });
@@ -2173,11 +2188,12 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
-      window.axios.post('/api/login', {
+      window.axios.post('/api/user/login', {
         email: this.email,
         password: this.password
       }).then(function (result) {
         _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('token:update', result.data);
+        _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('user:info');
 
         _this.$router.push({
           name: 'home'
@@ -2427,7 +2443,7 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
-      window.axios.post('/api/signup', {
+      window.axios.post('/api/user/signup', {
         name: this.name,
         email: this.email,
         password: this.password
@@ -2438,6 +2454,7 @@ __webpack_require__.r(__webpack_exports__);
           message: 'You are singed in'
         });
         _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('token:update', result.data);
+        _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('user:info');
 
         _this.$router.push({
           name: 'home'
@@ -39481,7 +39498,15 @@ var render = function() {
                   )
                 ])
               : _vm._e()
-          ])
+          ]),
+          _vm._v(" "),
+          _vm.user
+            ? _c("ul", { staticClass: "navbar-nav" }, [
+                _c("li", { staticClass: "nav-item" }, [
+                  _vm._v(_vm._s(this.user.name))
+                ])
+              ])
+            : _vm._e()
         ]
       )
     ],
