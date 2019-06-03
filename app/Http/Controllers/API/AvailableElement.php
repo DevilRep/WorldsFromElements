@@ -9,9 +9,9 @@ use App\Services\Elements;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
-use App\Models\{AvailableElement};
+use App\Models\{AvailableElement as AvailableElementModel};
 
-class AvailableElements extends Controller
+class AvailableElement extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +27,7 @@ class AvailableElements extends Controller
     {
         try {
             $new_element_id = $element_service->searchRecipe($request->components);
-            AvailableElement::firstOrCreate(['element_id' => $new_element_id]);
+            AvailableElementModel::firstOrCreate(['element_id' => $new_element_id]);
             return $this->availableElements();
         } catch (ElementNotExist $e) {
             return response()
@@ -46,7 +46,7 @@ class AvailableElements extends Controller
 
     protected function availableElements()
     {
-        return response()->json(AvailableElement::with('element')->get()->map(function ($record) {
+        return response()->json(AvailableElementModel::with('element')->get()->map(function ($record) {
             return $record->element;
         }));
     }

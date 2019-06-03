@@ -3,6 +3,10 @@
         <div class="row">
             <div class="card col-6 mx-auto">
                 <div class="card-body">
+                    <div class="row name-wrapper">
+                        <label class="label" for="name">Name</label>
+                        <input type="text" class="email form-control mb-2" id="name" v-model="name">
+                    </div>
                     <div class="row email-wrapper">
                         <label class="label" for="email">Email</label>
                         <input type="text" class="email form-control mb-2" id="email" v-model="email">
@@ -11,17 +15,6 @@
                         <label class="label" for="password">Password</label>
                         <div class="input-group mb-2">
                             <input v-bind:type="passwordFieldType" class="password form-control" id="password" v-model="password">
-                            <div class="input-group-append">
-                                <div class="input-group-text" v-on:click="togglePassword">
-                                    <i class="fa" :class="passwordIconClasses" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row password-wrapper">
-                        <label class="label" for="password">Confirm password</label>
-                        <div class="input-group mb-2">
-                            <input v-bind:type="passwordFieldType" class="password form-control" id="confirm-password" v-model="passwordConfirm">
                             <div class="input-group-append">
                                 <div class="input-group-text" v-on:click="togglePassword">
                                     <i class="fa" :class="passwordIconClasses" aria-hidden="true"></i>
@@ -45,38 +38,32 @@
     export default {
         mixins: [Login],
         data: () => ({
-            passwordConfirm: ''
+            name: ''
         }),
         methods: {
             signup() {
                 if (
                     !this.isEmailValid() ||
                     !this.isPasswordValid() ||
-                    !this.isPasswordLongEnough() ||
-                    !this.isPasswordSameAsConfirm()
+                    !this.isPasswordLongEnough()
                 ) {
                     return;
                 }
                 window.axios.post('/api/signup', {
+                    name: this.name,
                     email: this.email,
                     password: this.password
                 })
                     .then(result => {
                         EventBus.$emit('modal:message:show', {
                             type: 'success',
-                            title: 'Excellent!',
+                            title: 'Welcome!',
                             message: 'You are singed in'
                         });
                         EventBus.$emit('token:update', result.data);
+                        this.$router.push({ name: 'home' });
                     })
                     .catch(error => EventBus.$emit('modal:error:show', error.response.data.message));
-            },
-            isPasswordSameAsConfirm() {
-                let isNotValid = this.password !== this.passwordConfirm;
-                if (isNotValid) {
-                    EventBus.$emit('modal:error:show', 'Passwords are not the same - please check it')
-                }
-                return !isNotValid;
             }
         }
     }

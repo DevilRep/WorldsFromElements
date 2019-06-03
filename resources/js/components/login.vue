@@ -19,7 +19,10 @@
                         </div>
                     </div>
                     <div class="row controls-wrapper">
-                        <button class="btn btn-primary mx-auto" v-on:click="login">Log in</button>
+                        <div class="mx-auto">
+                            <button class="btn btn-primary" v-on:click="login">Log in</button>
+                            <button class="btn btn-primary" v-on:click="signup">Sign up now!</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -47,14 +50,13 @@
                         password: this.password
                     })
                     .then(result => {
-                        EventBus.$emit('modal:message:show', {
-                            type: 'success',
-                            title: 'Excellent!',
-                            message: 'You are logged in'
-                        });
                         EventBus.$emit('token:update', result.data);
+                        this.$router.push({ name: 'home' });
                     })
                     .catch(error => EventBus.$emit('modal:error:show', error.response.data.message));
+            },
+            signup() {
+                this.$router.push({ name: 'signup' });
             }
         }
     }

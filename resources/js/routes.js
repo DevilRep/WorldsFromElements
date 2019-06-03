@@ -6,6 +6,7 @@ import NotFound from './components/not-found';
 export default [
     {
         path: '/',
+        name: 'home',
         component: Game,
         meta: {
             middlewares: [
@@ -19,6 +20,7 @@ export default [
     },
     {
         path: '/signup',
+        name: 'signup',
         component: Signup
     },
     {

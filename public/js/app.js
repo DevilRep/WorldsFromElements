@@ -2106,12 +2106,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mixins: [_mixins_login__WEBPACK_IMPORTED_MODULE_1__["default"]],
   methods: {
     login: function login() {
+      var _this = this;
+
       if (!this.isEmailValid() || !this.isPasswordValid() || !this.isPasswordLongEnough()) {
         return;
       }
@@ -2120,14 +2125,18 @@ __webpack_require__.r(__webpack_exports__);
         email: this.email,
         password: this.password
       }).then(function (result) {
-        _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('modal:message:show', {
-          type: 'success',
-          title: 'Excellent!',
-          message: 'You are logged in'
-        });
         _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('token:update', result.data);
+
+        _this.$router.push({
+          name: 'home'
+        });
       })["catch"](function (error) {
         return _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('modal:error:show', error.response.data.message);
+      });
+    },
+    signup: function signup() {
+      this.$router.push({
+        name: 'signup'
       });
     }
   }
@@ -2349,50 +2358,41 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mixins: [_mixins_login__WEBPACK_IMPORTED_MODULE_1__["default"]],
   data: function data() {
     return {
-      passwordConfirm: ''
+      name: ''
     };
   },
   methods: {
     signup: function signup() {
-      if (!this.isEmailValid() || !this.isPasswordValid() || !this.isPasswordLongEnough() || !this.isPasswordSameAsConfirm()) {
+      var _this = this;
+
+      if (!this.isEmailValid() || !this.isPasswordValid() || !this.isPasswordLongEnough()) {
         return;
       }
 
       window.axios.post('/api/signup', {
+        name: this.name,
         email: this.email,
         password: this.password
       }).then(function (result) {
         _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('modal:message:show', {
           type: 'success',
-          title: 'Excellent!',
+          title: 'Welcome!',
           message: 'You are singed in'
         });
         _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('token:update', result.data);
+
+        _this.$router.push({
+          name: 'home'
+        });
       })["catch"](function (error) {
         return _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('modal:error:show', error.response.data.message);
       });
-    },
-    isPasswordSameAsConfirm: function isPasswordSameAsConfirm() {
-      var isNotValid = this.password !== this.passwordConfirm;
-
-      if (isNotValid) {
-        _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('modal:error:show', 'Passwords are not the same - please check it');
-      }
-
-      return !isNotValid;
     }
   }
 });
@@ -39678,14 +39678,19 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "row controls-wrapper" }, [
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-primary mx-auto",
-                on: { click: _vm.login }
-              },
-              [_vm._v("Log in")]
-            )
+            _c("div", { staticClass: "mx-auto" }, [
+              _c(
+                "button",
+                { staticClass: "btn btn-primary", on: { click: _vm.login } },
+                [_vm._v("Log in")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                { staticClass: "btn btn-primary", on: { click: _vm.signup } },
+                [_vm._v("Sign up now!")]
+              )
+            ])
           ])
         ])
       ])
@@ -39848,6 +39853,34 @@ var render = function() {
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "card col-6 mx-auto" }, [
         _c("div", { staticClass: "card-body" }, [
+          _c("div", { staticClass: "row name-wrapper" }, [
+            _c("label", { staticClass: "label", attrs: { for: "name" } }, [
+              _vm._v("Name")
+            ]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.name,
+                  expression: "name"
+                }
+              ],
+              staticClass: "email form-control mb-2",
+              attrs: { type: "text", id: "name" },
+              domProps: { value: _vm.name },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.name = $event.target.value
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
           _c("div", { staticClass: "row email-wrapper" }, [
             _c("label", { staticClass: "label", attrs: { for: "email" } }, [
               _vm._v("Email")
@@ -39958,114 +39991,6 @@ var render = function() {
                           return
                         }
                         _vm.password = $event.target.value
-                      }
-                    }
-                  }),
-              _vm._v(" "),
-              _c("div", { staticClass: "input-group-append" }, [
-                _c(
-                  "div",
-                  {
-                    staticClass: "input-group-text",
-                    on: { click: _vm.togglePassword }
-                  },
-                  [
-                    _c("i", {
-                      staticClass: "fa",
-                      class: _vm.passwordIconClasses,
-                      attrs: { "aria-hidden": "true" }
-                    })
-                  ]
-                )
-              ])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "row password-wrapper" }, [
-            _c("label", { staticClass: "label", attrs: { for: "password" } }, [
-              _vm._v("Confirm password")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "input-group mb-2" }, [
-              _vm.passwordFieldType === "checkbox"
-                ? _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.passwordConfirm,
-                        expression: "passwordConfirm"
-                      }
-                    ],
-                    staticClass: "password form-control",
-                    attrs: { id: "confirm-password", type: "checkbox" },
-                    domProps: {
-                      checked: Array.isArray(_vm.passwordConfirm)
-                        ? _vm._i(_vm.passwordConfirm, null) > -1
-                        : _vm.passwordConfirm
-                    },
-                    on: {
-                      change: function($event) {
-                        var $$a = _vm.passwordConfirm,
-                          $$el = $event.target,
-                          $$c = $$el.checked ? true : false
-                        if (Array.isArray($$a)) {
-                          var $$v = null,
-                            $$i = _vm._i($$a, $$v)
-                          if ($$el.checked) {
-                            $$i < 0 && (_vm.passwordConfirm = $$a.concat([$$v]))
-                          } else {
-                            $$i > -1 &&
-                              (_vm.passwordConfirm = $$a
-                                .slice(0, $$i)
-                                .concat($$a.slice($$i + 1)))
-                          }
-                        } else {
-                          _vm.passwordConfirm = $$c
-                        }
-                      }
-                    }
-                  })
-                : _vm.passwordFieldType === "radio"
-                ? _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.passwordConfirm,
-                        expression: "passwordConfirm"
-                      }
-                    ],
-                    staticClass: "password form-control",
-                    attrs: { id: "confirm-password", type: "radio" },
-                    domProps: { checked: _vm._q(_vm.passwordConfirm, null) },
-                    on: {
-                      change: function($event) {
-                        _vm.passwordConfirm = null
-                      }
-                    }
-                  })
-                : _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.passwordConfirm,
-                        expression: "passwordConfirm"
-                      }
-                    ],
-                    staticClass: "password form-control",
-                    attrs: {
-                      id: "confirm-password",
-                      type: _vm.passwordFieldType
-                    },
-                    domProps: { value: _vm.passwordConfirm },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.passwordConfirm = $event.target.value
                       }
                     }
                   }),
@@ -55970,6 +55895,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ([{
   path: '/',
+  name: 'home',
   component: _components_game__WEBPACK_IMPORTED_MODULE_0__["default"],
   meta: {
     middlewares: ['auth']
@@ -55979,6 +55905,7 @@ __webpack_require__.r(__webpack_exports__);
   component: _components_login__WEBPACK_IMPORTED_MODULE_1__["default"]
 }, {
   path: '/signup',
+  name: 'signup',
   component: _components_signup__WEBPACK_IMPORTED_MODULE_2__["default"]
 }, {
   path: '*',
