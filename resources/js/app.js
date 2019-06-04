@@ -1,6 +1,6 @@
-import Bootstrap from './bootstrap';
+import './bootstrap';
 import Vue from 'vue';
-import Components from './components'
+import './components'
 import DragAndDrop from 'vue-drag-drop';
 import router from './router';
 

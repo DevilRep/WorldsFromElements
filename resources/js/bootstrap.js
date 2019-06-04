@@ -1,5 +1,5 @@
 import Popper from 'popper.js';
-import Bootstrap from 'bootstrap';
+import 'bootstrap';
 import jQuery from 'jquery';
 import Axios from 'axios';
 import VueCookies from 'vue-cookies';
