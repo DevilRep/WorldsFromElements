@@ -21,18 +21,19 @@
             }
         },
         methods: {
-            makeElement(data) {
+            async makeElement(data) {
                 let droppedOn = this.transferData;
                 if (droppedOn === data) {
                     return;
                 }
-                window.axios.post('/api/elements', { components: [data, droppedOn] })
-                    .then(result => {
-                        EventBus.$emit('elements:update', result.data);
-                        EventBus.$emit('game:progress');
-                        EventBus.$emit('game:new:on');
-                    })
-                    .catch(error => EventBus.$emit('modal:error:show', error.response.data.message))
+                try {
+                    let result = await window.axios.post('/api/elements', {components: [data, droppedOn]});
+                    EventBus.$emit('elements:update', result.data);
+                    EventBus.$emit('game:progress');
+                    EventBus.$emit('game:new:on');
+                } catch (error) {
+                    EventBus.$emit('modal:error:show', error.response.data.message);
+                }
             }
         }
     }

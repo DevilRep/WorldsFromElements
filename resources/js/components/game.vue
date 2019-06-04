@@ -38,46 +38,50 @@
             this.all();
         },
         methods: {
-            all() {
-                window.axios.get('/api/elements')
-                    .then(response => {
-                        this.updateElements(response.data);
-                        EventBus.$emit('elements:draggable:on');
-                    })
-                    .catch(error => EventBus.$emit('modal:error:show', error.response.data.message));
+            async all() {
+                try {
+                    let response = await window.axios.get('/api/elements');
+                    this.updateElements(response.data);
+                    EventBus.$emit('elements:draggable:on');
+                } catch(error) {
+                    EventBus.$emit('modal:error:show', error.response.data.message);
+                }
             },
-            newGame() {
-                window.axios.post('/api/game')
-                    .then(response => {
-                        EventBus.$emit('game:progress');
-                        this.updateElements(response.data);
-                        EventBus.$emit('elements:draggable:on');
-                        EventBus.$emit('game:new:off');
-                    })
-                    .catch(error => EventBus.$emit('modal:error:show', error.response.data.message));
+            async newGame() {
+                try {
+                    let response = await window.axios.post('/api/game');
+                    EventBus.$emit('game:progress');
+                    EventBus.$emit('elements:draggable:on');
+                    EventBus.$emit('game:new:off');
+                    this.updateElements(response.data);
+                } catch (error) {
+                    EventBus.$emit('modal:error:show', error.response.data.message)
+                }
             },
             updateElements(elements) {
                 this.elements = elements;
             },
-            progress() {
-                window.axios.get('/api/game')
-                    .then(result => {
-                        this.newGameAvailable = !result.data.new;
-                        this.$refs.progress.set(result.data.progress.current);
-                        if (!this.maxRecipes) {
-                            this.maxRecipes = result.data.progress.max;
-                        }
-                        if (!result.data.end) {
-                            return;
-                        }
-                        EventBus.$emit('modal:message:show', {
-                            type: 'success',
-                            title: 'Congratulations!',
-                            message: 'You won the game! Well done!'
-                        });
-                        EventBus.$emit('elements:draggable:off');
-                    })
-                    .catch(error => EventBus.$emit('modal:error:show', error.response.data.message))
+            async progress() {
+                try {
+                    let result = await window.axios.get('/api/game');
+                    this.newGameAvailable = !result.data.new;
+                    this.$refs.progress.set(result.data.progress.current);
+                    if (!this.maxRecipes) {
+                        this.maxRecipes = result.data.progress.max;
+                    }
+                    if (!result.data.end) {
+                        return;
+                    }
+                    EventBus.$emit('game:new:on');
+                    EventBus.$emit('modal:message:show', {
+                        type: 'success',
+                        title: 'Congratulations!',
+                        message: 'You won the game! Well done!'
+                    });
+                    EventBus.$emit('elements:draggable:off');
+                } catch (error) {
+                    EventBus.$emit('modal:error:show', error.response.data.message)
+                }
             }
         }
     }

@@ -54,10 +54,13 @@
                 }
                 this.newGameAvailable = false;
             },
-            loadUserInfo() {
-                window.axios.get('/api/user/info')
-                    .then(result => this.user = result.data)
-                    .catch(error => EventBus.$emit('modal:error:show', error.response.data.message));
+            async loadUserInfo() {
+                try {
+                    let result = await window.axios.get('/api/user/info');
+                    this.user = result.data;
+                } catch (error) {
+                    EventBus.$emit('modal:error:show', error.response.data.message);
+                }
             }
         }
     }
