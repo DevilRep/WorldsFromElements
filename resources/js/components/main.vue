@@ -1,8 +1,8 @@
 <template>
     <div class="container">
         <router-view></router-view>
-        <modal-component ref="modal"></modal-component>
-        <loader-component ref="loader"></loader-component>
+        <vue-modal ref="modal"></vue-modal>
+        <vue-loader ref="loader"></vue-loader>
     </div>
 </template>
 

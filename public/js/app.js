@@ -23315,7 +23315,7 @@ var render = function() {
         "div",
         { staticClass: "col-12 text-right controls-wrapper" },
         [
-          _c("progress-component", {
+          _c("vue-progress", {
             ref: "progress",
             attrs: { max: _vm.maxRecipes, min: "0" }
           })
@@ -23329,7 +23329,7 @@ var render = function() {
         "div",
         { staticClass: "col-12" },
         _vm._l(_vm.elements, function(element) {
-          return _c("element-component", {
+          return _c("vue-element", {
             key: element.id,
             attrs: { item: element, draggable: _vm.draggable }
           })
@@ -23671,9 +23671,9 @@ var render = function() {
     [
       _c("router-view"),
       _vm._v(" "),
-      _c("modal-component", { ref: "modal" }),
+      _c("vue-modal", { ref: "modal" }),
       _vm._v(" "),
-      _c("loader-component", { ref: "loader" })
+      _c("vue-loader", { ref: "loader" })
     ],
     1
   )
@@ -39098,7 +39098,7 @@ for (var _i = 0, _Object$entries = Object.entries(componentDefinitions); _i < _O
       name = _Object$entries$_i[0],
       definition = _Object$entries$_i[1];
 
-  vue__WEBPACK_IMPORTED_MODULE_0___default.a.component(name.toLowerCase() + '-component', definition);
+  vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('vue-' + name.toLowerCase(), definition);
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (components);

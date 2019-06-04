@@ -13,7 +13,7 @@ import Progress from './progress';
 let componentDefinitions = { Element, Game, Login, Main, Modal, NotFound, Signup, Header, Loader, Progress };
 let components = {};
 for (let [name, definition] of Object.entries(componentDefinitions)) {
-    Vue.component(name.toLowerCase() + '-component', definition);
+    Vue.component('vue-' + name.toLowerCase(), definition);
 }
 
 export default components;

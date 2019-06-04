@@ -2,17 +2,17 @@
     <div class="page game">
         <div class="row">
             <div class="col-12 text-right controls-wrapper">
-                <progress-component :max="maxRecipes" min="0" ref="progress"></progress-component>
+                <vue-progress :max="maxRecipes" min="0" ref="progress"></vue-progress>
             </div>
         </div>
         <div class="row justify-content-center">
             <div class="col-12">
-                <element-component
+                <vue-element
                         v-for="element in elements"
                         :key="element.id"
                         v-bind:item="element"
                         v-bind:draggable="draggable"
-                ></element-component>
+                ></vue-element>
             </div>
         </div>
     </div>
