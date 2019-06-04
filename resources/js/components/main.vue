@@ -8,6 +8,7 @@
 
 <script>
     import EventBus from '../eventBus';
+    import VueCookies from 'vue-cookies';
 
     export default {
         mounted() {
@@ -36,6 +37,7 @@
                 if (!data.access_token) {
                     return;
                 }
+                VueCookies.set('auth', data.access_token);
                 window.axios.defaults.headers.common.Authorization = 'Bearer ' + data.access_token;
             }
         }
