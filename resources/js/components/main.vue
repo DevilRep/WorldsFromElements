@@ -1,13 +1,14 @@
 <template>
     <div class="container">
         <router-view></router-view>
-        <modal-component ref="modal"></modal-component>
-        <loader-component ref="loader"></loader-component>
+        <vue-modal ref="modal"></vue-modal>
+        <vue-loader ref="loader"></vue-loader>
     </div>
 </template>
 
 <script>
     import EventBus from '../eventBus';
+    import VueCookies from 'vue-cookies';
 
     export default {
         mounted() {
@@ -33,11 +34,10 @@
                     .open()
             },
             tokenUpdate(data) {
-                debugger;
                 if (!data.access_token) {
                     return;
                 }
-
+                VueCookies.set('auth', data.access_token);
                 window.axios.defaults.headers.common.Authorization = 'Bearer ' + data.access_token;
             }
         }

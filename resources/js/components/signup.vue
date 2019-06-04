@@ -41,7 +41,7 @@
             name: ''
         }),
         methods: {
-            signup() {
+            async signup() {
                 if (
                     !this.isEmailValid() ||
                     !this.isPasswordValid() ||
@@ -49,21 +49,23 @@
                 ) {
                     return;
                 }
-                window.axios.post('/api/signup', {
-                    name: this.name,
-                    email: this.email,
-                    password: this.password
-                })
-                    .then(result => {
-                        EventBus.$emit('modal:message:show', {
-                            type: 'success',
-                            title: 'Welcome!',
-                            message: 'You are singed in'
-                        });
-                        EventBus.$emit('token:update', result.data);
-                        this.$router.push({ name: 'home' });
-                    })
-                    .catch(error => EventBus.$emit('modal:error:show', error.response.data.message));
+                try {
+                    let result = await window.axios.post('/api/user/signup', {
+                        name: this.name,
+                        email: this.email,
+                        password: this.password
+                    });
+                    EventBus.$emit('modal:message:show', {
+                        type: 'success',
+                        title: 'Welcome!',
+                        message: 'You are singed in'
+                    });
+                    EventBus.$emit('token:update', result.data);
+                    EventBus.$emit('user:info');
+                    this.$router.push({name: 'home'});
+                } catch (error) {
+                    EventBus.$emit('modal:error:show', error.response.data.message);
+                }
             }
         }
     }

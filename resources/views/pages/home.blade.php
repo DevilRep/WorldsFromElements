@@ -1,6 +1,6 @@
 @extends('layouts.default')
 
 @section('content')
-    <header-component></header-component>
-    <main-component></main-component>
+    <vue-header></vue-header>
+    <vue-main></vue-main>
 @endsection

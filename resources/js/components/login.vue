@@ -37,7 +37,7 @@
     export default {
         mixins: [Login],
         methods: {
-            login() {
+            async login() {
                 if (
                     !this.isEmailValid() ||
                     !this.isPasswordValid() ||
@@ -45,15 +45,17 @@
                 ) {
                     return;
                 }
-                window.axios.post('/api/login', {
+                try {
+                    let result = await window.axios.post('/api/user/login', {
                         email: this.email,
                         password: this.password
-                    })
-                    .then(result => {
-                        EventBus.$emit('token:update', result.data);
-                        this.$router.push({ name: 'home' });
-                    })
-                    .catch(error => EventBus.$emit('modal:error:show', error.response.data.message));
+                    });
+                    EventBus.$emit('token:update', result.data);
+                    EventBus.$emit('user:info');
+                    this.$router.push({name: 'home'});
+                } catch (error) {
+                    EventBus.$emit('modal:error:show', error.response.data.message);
+                }
             },
             signup() {
                 this.$router.push({ name: 'signup' });
