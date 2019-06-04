@@ -56,10 +56,7 @@
             },
             loadUserInfo() {
                 window.axios.get('/api/user/info')
-                    .then(result => {
-                        debugger;
-                        this.user = result.data;
-                    })
+                    .then(result => this.user = result.data)
                     .catch(error => EventBus.$emit('modal:error:show', error.response.data.message));
             }
         }

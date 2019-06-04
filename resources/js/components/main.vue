@@ -33,11 +33,9 @@
                     .open()
             },
             tokenUpdate(data) {
-                debugger;
                 if (!data.access_token) {
                     return;
                 }
-
                 window.axios.defaults.headers.common.Authorization = 'Bearer ' + data.access_token;
             }
         }

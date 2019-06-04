@@ -1,13 +1,12 @@
-require('./bootstrap');
+import Bootstrap from './bootstrap';
+import Vue from 'vue';
+import Components from './components'
+import DragAndDrop from 'vue-drag-drop';
+import router from './router';
 
-window.Vue = require('vue');
-
-const files = require.context('./', true, /\.vue$/i);
-files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0] + '-component', files(key).default));
-
-Vue.use(require('vue-drag-drop'));
+Vue.use(DragAndDrop);
 
 new Vue({
     el: '#app',
-    router: require('./router').default
+    router
 });
