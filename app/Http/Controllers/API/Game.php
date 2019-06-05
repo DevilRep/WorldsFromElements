@@ -10,7 +10,7 @@ use App\Http\Controllers\Controller;
 
 class Game extends Controller
 {
-    public function store()
+    public function store(Request $request)
     {
         $initial_elements = array_column(InitialElement::all()->all(), null, 'element_id');
         AvailableElement::whereNotIn('element_id', array_keys($initial_elements))->delete();
@@ -19,20 +19,31 @@ class Game extends Controller
             if (isset($available[$element->element_id])) {
                 continue;
             }
-            AvailableElement::create(['element_id' => $element->element_id]);
+            AvailableElement::create([
+                'element_id' => $element->element_id,
+                'user_id' => $request->user()->id
+            ]);
         }
-        return response()->json(AvailableElement::with('element')->get()->map(function ($record) {
+        return response()->json(
+            AvailableElement::with('element')
+                ->where('user_id', $request->user()->id)
+                ->get()
+                ->map(function ($record) {
             return $record->element;
-        }));
+        })
+        );
     }
 
-    public function index(Elements $element_service)
+    public function index(Request $request, Elements $element_service)
     {
-        $elements = AvailableElement::with('element')->get()->map(function ($record) {
+        $elements = AvailableElement::with('element')
+            ->where('user_id', $request->user()->id)
+            ->get()
+            ->map(function ($record) {
             return $record->element;
         });
         $initial_count = InitialElement::query()->count();
-        $created_count = $element_service->createdElementsCount();
+        $created_count = $element_service->createdElementsCount($request->user());
         $recipes_count = $element_service->recipesCount();
         return response()->json([
             'end' => $created_count === $recipes_count,

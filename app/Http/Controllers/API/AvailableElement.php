@@ -18,17 +18,20 @@ class AvailableElement extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return $this->availableElements();
+        return $this->availableElements($request);
     }
 
     public function store(Request $request, Elements $element_service)
     {
         try {
             $new_element_id = $element_service->searchRecipe($request->components);
-            AvailableElementModel::firstOrCreate(['element_id' => $new_element_id]);
-            return $this->availableElements();
+            AvailableElementModel::firstOrCreate([
+                'element_id' => $new_element_id,
+                'user_id' => $request->user()->id
+            ]);
+            return $this->availableElements($request);
         } catch (ElementNotExist $e) {
             return response()
                 ->json(['message' => $e->getMessage()], 404);
@@ -44,10 +47,16 @@ class AvailableElement extends Controller
         }
     }
 
-    protected function availableElements()
+    protected function availableElements(Request $request)
     {
-        return response()->json(AvailableElementModel::with('element')->get()->map(function ($record) {
-            return $record->element;
-        }));
+        return response()
+            ->json(
+                AvailableElementModel::with('element')
+                    ->where('user_id', $request->user()->id)
+                    ->get()
+                    ->map(function ($record) {
+                        return $record->element;
+                    })
+            );
     }
 }
