@@ -194,3 +194,16 @@ footer {
     opacity: 1;
   }
 }
+
+.page.not-found {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 500px;
+
+  .text {
+    width: 170px;
+    margin: auto;
+  }
+}
+

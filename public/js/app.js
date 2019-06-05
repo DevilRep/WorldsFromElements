@@ -2528,19 +2528,13 @@ __webpack_require__.r(__webpack_exports__);
     _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('token:update', this.tokenUpdate);
     _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('token:clear', this.tokenClear);
     _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('loader:show', function () {
-      if (!_this.$refs.loader) {
-        return;
-      }
-
-      _this.$refs.loader.show();
+      return _this.$refs.loader.show();
     });
     _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('loader:hide', function () {
-      if (!_this.$refs.loader) {
-        return;
-      }
-
-      _this.$refs.loader.hide();
+      return _this.$refs.loader.hide();
     });
+  },
+  mounted: function mounted() {
     _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$once('router:loaded', function () {
       return _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('loader:hide');
     });
@@ -23953,7 +23947,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "page not-found" }, [
-      _c("h1", [_vm._v("Not found")])
+      _c("h1", { staticClass: "text" }, [_vm._v("Not found")])
     ])
   }
 ]
