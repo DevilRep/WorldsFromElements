@@ -14,7 +14,7 @@
 
         <div class="collapse navbar-collapse" id="menu">
             <ul class="navbar-nav mr-auto">
-                <li v-if="isNewGameAvailable" class="nav-item active">
+                <li v-if="isNewGameAvailable" class="nav-item">
                     <a href="#" class="nav-link" v-on:click="newGame">New game</a>
                 </li>
             </ul>

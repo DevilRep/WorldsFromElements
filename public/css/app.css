@@ -10795,6 +10795,26 @@ footer {
 }
 
 .navbar-light .navbar-nav .nav-link {
+  padding: 0.5rem 1rem 0.3rem 1rem;
+  font-size: 1rem;
+}
+
+.navbar-light .navbar-nav a.nav-link {
+  color: #fff;
+}
+
+.navbar-light .navbar-nav a.nav-link:hover,
+.navbar-light .navbar-nav a.nav-link:focus {
+  color: #fff;
+  font-weight: bold;
+}
+
+.navbar-light .navbar-nav span.nav-link {
+  color: #fff;
+}
+
+.navbar-light .navbar-nav span.nav-link:hover,
+.navbar-light .navbar-nav span.nav-link:focus {
   color: #fff;
 }
 

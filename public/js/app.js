@@ -23570,7 +23570,7 @@ var render = function() {
         [
           _c("ul", { staticClass: "navbar-nav mr-auto" }, [
             _vm.isNewGameAvailable
-              ? _c("li", { staticClass: "nav-item active" }, [
+              ? _c("li", { staticClass: "nav-item" }, [
                   _c(
                     "a",
                     {
