@@ -14,7 +14,7 @@ class AddUserIdAvailableElements extends Migration
     public function up()
     {
         Schema::table('available_elements', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_id')->default(null);
+            $table->unsignedBigInteger('user_id')->nullable(false);
 
             $table->foreign('user_id')->references('id')->on('users')->onDuplicate('cascade');
         });

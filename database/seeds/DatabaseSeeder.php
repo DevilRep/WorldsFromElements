@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(ClearAll::class);
+        $this->call(Users::class);
         $this->call(Elements::class);
         $this->call(InitialElements::class);
         $this->call(Recipes::class);
