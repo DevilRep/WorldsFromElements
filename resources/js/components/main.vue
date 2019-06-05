@@ -16,18 +16,10 @@
             EventBus.$on('modal:message:show', this.showMessage);
             EventBus.$on('token:update', this.tokenUpdate);
             EventBus.$on('token:clear', this.tokenClear);
-            EventBus.$on('loader:show', () => {
-                if (!this.$refs.loader) {
-                    return;
-                }
-                this.$refs.loader.show();
-            });
-            EventBus.$on('loader:hide', () => {
-                if (!this.$refs.loader) {
-                    return;
-                }
-                this.$refs.loader.hide()
-            });
+            EventBus.$on('loader:show', () => this.$refs.loader.show());
+            EventBus.$on('loader:hide', () => this.$refs.loader.hide());
+        },
+        mounted() {
             EventBus.$once('router:loaded', () => EventBus.$emit('loader:hide'));
             EventBus.$emit('router:load:check');
         },
