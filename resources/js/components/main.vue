@@ -15,6 +15,7 @@
             EventBus.$on('modal:error:show', this.showError);
             EventBus.$on('modal:message:show', this.showMessage);
             EventBus.$on('token:update', this.tokenUpdate);
+            EventBus.$on('token:clear', this.tokenClear);
             EventBus.$on('loader:show', () => this.$refs.loader.show());
             EventBus.$on('loader:hide', () => this.$refs.loader.hide());
             EventBus.$once('router:loaded', () => EventBus.$emit('loader:hide'));
@@ -39,6 +40,9 @@
                 }
                 VueCookies.set('auth', data.access_token);
                 window.axios.defaults.headers.common.Authorization = 'Bearer ' + data.access_token;
+            },
+            tokenClear() {
+                delete window.axios.defaults.headers.common.Authorization;
             }
         }
     }

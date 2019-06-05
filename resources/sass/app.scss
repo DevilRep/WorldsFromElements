@@ -139,10 +139,10 @@ footer {
 
 .page.game .controls-wrapper {
   margin-bottom: 10px;
+}
 
-  .link {
-    color: $link-color;
-  }
+.navbar-light .navbar-nav .nav-link {
+  color: $text-color;
 }
 
 .page.login .card-body,

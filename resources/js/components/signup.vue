@@ -61,7 +61,6 @@
                         message: 'You are singed in'
                     });
                     EventBus.$emit('token:update', result.data);
-                    EventBus.$emit('user:info');
                     this.$router.push({name: 'home'});
                 } catch (error) {
                     EventBus.$emit('modal:error:show', error.response.data.message);

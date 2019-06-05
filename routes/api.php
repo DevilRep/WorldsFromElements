@@ -9,5 +9,6 @@ Route::namespace('API')->group(function () {
         Route::resource('game', 'Game')->only(['index', 'store']);
 
         Route::get('user/info', 'User@info');
+        Route::post('user/logout', 'User@logout');
     });
 });

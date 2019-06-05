@@ -14,12 +14,13 @@
 
         <div class="collapse navbar-collapse" id="menu">
             <ul class="navbar-nav mr-auto">
-                <li v-if="newGameAvailable" class="nav-item active">
+                <li v-if="isNewGameAvailable" class="nav-item active">
                     <a href="#" class="nav-link" v-on:click="newGame">New game</a>
                 </li>
             </ul>
             <ul v-if="user" class="navbar-nav">
-                <li class="nav-item">{{ this.user.name }}</li>
+                <li class="nav-item"><span class="nav-link">{{ this.user.name }}</span></li>
+                <li class="nav-item"><a href="#" class="nav-link" v-on:click="logout">Log out</a></li>
             </ul>
         </div>
     </nav>
@@ -27,12 +28,18 @@
 
 <script>
     import EventBus from '../eventBus';
+    import VueCookies from 'vue-cookies';
 
     export default {
         data: () => ({
             newGameAvailable: false,
             user: null
         }),
+        computed: {
+            isNewGameAvailable() {
+                return this.user && this.newGameAvailable;
+            }
+        },
         mounted() {
             EventBus.$on('game:new:on', this.enableNewGame);
             EventBus.$on('game:new:off', this.disableNewGame);
@@ -61,6 +68,13 @@
                 } catch (error) {
                     EventBus.$emit('modal:error:show', error.response.data.message);
                 }
+            },
+            async logout() {
+                await window.axios.post('/api/user/logout');
+                this.user = null;
+                VueCookies.remove('auth');
+                EventBus.$emit('token:clear');
+                this.$router.push({ name: 'login' });
             }
         }
     }
