@@ -41,21 +41,27 @@
         methods: {
             async all() {
                 try {
+                    EventBus.$emit('loader:show');
                     let response = await window.axios.get('/api/elements');
                     this.updateElements(response.data);
                     EventBus.$emit('elements:draggable:on');
+                    EventBus.$emit('loader:hide');
                 } catch(error) {
+                    EventBus.$emit('loader:hide');
                     EventBus.$emit('modal:error:show', error.response.data.message);
                 }
             },
             async newGame() {
                 try {
+                    EventBus.$emit('loader:show');
                     let response = await window.axios.post('/api/game');
                     EventBus.$emit('game:progress');
                     EventBus.$emit('elements:draggable:on');
                     EventBus.$emit('game:new:off');
                     this.updateElements(response.data);
+                    EventBus.$emit('loader:hide');
                 } catch (error) {
+                    EventBus.$emit('loader:hide');
                     EventBus.$emit('modal:error:show', error.response.data.message)
                 }
             },
@@ -86,7 +92,6 @@
                     });
                     EventBus.$emit('elements:draggable:off');
                 } catch (error) {
-                    debugger;
                     EventBus.$emit('modal:error:show', error.response.data.message)
                 }
             }

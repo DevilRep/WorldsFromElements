@@ -1914,30 +1914,33 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 3:
                 _context.prev = 3;
-                _context.next = 6;
+                _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('loader:show');
+                _context.next = 7;
                 return window.axios.post('/api/elements', {
                   components: [data, droppedOn]
                 });
 
-              case 6:
+              case 7:
                 result = _context.sent;
                 _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('elements:update', result.data);
                 _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('game:progress');
                 _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('game:new:on');
-                _context.next = 15;
+                _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('loader:hide');
+                _context.next = 18;
                 break;
 
-              case 12:
-                _context.prev = 12;
+              case 14:
+                _context.prev = 14;
                 _context.t0 = _context["catch"](3);
+                _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('loader:hide');
                 _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('modal:error:show', _context.t0.response.data.message);
 
-              case 15:
+              case 18:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[3, 12]]);
+        }, _callee, this, [[3, 14]]);
       }));
 
       function makeElement(_x) {
@@ -2025,27 +2028,30 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.prev = 0;
-                _context.next = 3;
+                _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('loader:show');
+                _context.next = 4;
                 return window.axios.get('/api/elements');
 
-              case 3:
+              case 4:
                 response = _context.sent;
                 this.updateElements(response.data);
                 _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('elements:draggable:on');
-                _context.next = 11;
+                _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('loader:hide');
+                _context.next = 14;
                 break;
 
-              case 8:
-                _context.prev = 8;
+              case 10:
+                _context.prev = 10;
                 _context.t0 = _context["catch"](0);
+                _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('loader:hide');
                 _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('modal:error:show', _context.t0.response.data.message);
 
-              case 11:
+              case 14:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[0, 8]]);
+        }, _callee, this, [[0, 10]]);
       }));
 
       function all() {
@@ -2064,29 +2070,32 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.prev = 0;
-                _context2.next = 3;
+                _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('loader:show');
+                _context2.next = 4;
                 return window.axios.post('/api/game');
 
-              case 3:
+              case 4:
                 response = _context2.sent;
                 _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('game:progress');
                 _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('elements:draggable:on');
                 _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('game:new:off');
                 this.updateElements(response.data);
-                _context2.next = 13;
+                _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('loader:hide');
+                _context2.next = 16;
                 break;
 
-              case 10:
-                _context2.prev = 10;
+              case 12:
+                _context2.prev = 12;
                 _context2.t0 = _context2["catch"](0);
+                _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('loader:hide');
                 _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('modal:error:show', _context2.t0.response.data.message);
 
-              case 13:
+              case 16:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, this, [[0, 10]]);
+        }, _callee2, this, [[0, 12]]);
       }));
 
       function newGame() {
@@ -2142,16 +2151,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   message: 'You won the game! Well done!'
                 });
                 _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('elements:draggable:off');
-                _context3.next = 16;
+                _context3.next = 15;
                 break;
 
               case 12:
                 _context3.prev = 12;
                 _context3.t0 = _context3["catch"](0);
-                debugger;
                 _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('modal:error:show', _context3.t0.response.data.message);
 
-              case 16:
+              case 15:
               case "end":
                 return _context3.stop();
             }
@@ -2512,7 +2520,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mounted: function mounted() {
+  created: function created() {
     var _this = this;
 
     _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('modal:error:show', this.showError);
@@ -2520,10 +2528,18 @@ __webpack_require__.r(__webpack_exports__);
     _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('token:update', this.tokenUpdate);
     _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('token:clear', this.tokenClear);
     _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('loader:show', function () {
-      return _this.$refs.loader.show();
+      if (!_this.$refs.loader) {
+        return;
+      }
+
+      _this.$refs.loader.show();
     });
     _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('loader:hide', function () {
-      return _this.$refs.loader.hide();
+      if (!_this.$refs.loader) {
+        return;
+      }
+
+      _this.$refs.loader.hide();
     });
     _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$once('router:loaded', function () {
       return _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('loader:hide');

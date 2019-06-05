@@ -27,11 +27,14 @@
                     return;
                 }
                 try {
+                    EventBus.$emit('loader:show');
                     let result = await window.axios.post('/api/elements', {components: [data, droppedOn]});
                     EventBus.$emit('elements:update', result.data);
                     EventBus.$emit('game:progress');
                     EventBus.$emit('game:new:on');
+                    EventBus.$emit('loader:hide');
                 } catch (error) {
+                    EventBus.$emit('loader:hide');
                     EventBus.$emit('modal:error:show', error.response.data.message);
                 }
             }
