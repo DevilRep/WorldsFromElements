@@ -2010,6 +2010,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return _this.draggable = true;
     });
     _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$on('game:new', this.newGame);
+    _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('user:info');
     _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('game:progress');
     this.all();
   },
@@ -2112,42 +2113,50 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 3:
                 result = _context3.sent;
-                this.newGameAvailable = !result.data["new"];
-                this.$refs.progress.set(result.data.progress.current);
 
-                if (!this.maxRecipes) {
-                  this.maxRecipes = result.data.progress.max;
+                if (result.data["new"]) {
+                  _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('game:new:off');
+                } else {
+                  _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('game:new:on');
+                }
+
+                if (this.$refs.progress) {
+                  this.$refs.progress.set(result.data.progress.current);
+
+                  if (!this.maxRecipes) {
+                    this.maxRecipes = result.data.progress.max;
+                  }
                 }
 
                 if (result.data.end) {
-                  _context3.next = 9;
+                  _context3.next = 8;
                   break;
                 }
 
                 return _context3.abrupt("return");
 
-              case 9:
-                _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('game:new:on');
+              case 8:
                 _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('modal:message:show', {
                   type: 'success',
                   title: 'Congratulations!',
                   message: 'You won the game! Well done!'
                 });
                 _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('elements:draggable:off');
-                _context3.next = 17;
+                _context3.next = 16;
                 break;
 
-              case 14:
-                _context3.prev = 14;
+              case 12:
+                _context3.prev = 12;
                 _context3.t0 = _context3["catch"](0);
+                debugger;
                 _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('modal:error:show', _context3.t0.response.data.message);
 
-              case 17:
+              case 16:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, this, [[0, 14]]);
+        }, _callee3, this, [[0, 12]]);
       }));
 
       function progress() {
@@ -2173,6 +2182,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _eventBus__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../eventBus */ "./resources/js/eventBus.js");
+/* harmony import */ var vue_cookies__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-cookies */ "./node_modules/vue-cookies/vue-cookies.js");
+/* harmony import */ var vue_cookies__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vue_cookies__WEBPACK_IMPORTED_MODULE_2__);
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -2206,6 +2217,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2213,6 +2226,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       newGameAvailable: false,
       user: null
     };
+  },
+  computed: {
+    isNewGameAvailable: function isNewGameAvailable() {
+      return this.user && this.newGameAvailable;
+    }
   },
   mounted: function mounted() {
     _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$on('game:new:on', this.enableNewGame);
@@ -2274,6 +2292,39 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
 
       return loadUserInfo;
+    }(),
+    logout: function () {
+      var _logout = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return window.axios.post('/api/user/logout');
+
+              case 2:
+                this.user = null;
+                vue_cookies__WEBPACK_IMPORTED_MODULE_2___default.a.remove('auth');
+                _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('token:clear');
+                this.$router.push({
+                  name: 'login'
+                });
+
+              case 6:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function logout() {
+        return _logout.apply(this, arguments);
+      }
+
+      return logout;
     }()
   }
 });
@@ -2403,24 +2454,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 5:
                 result = _context.sent;
                 _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('token:update', result.data);
-                _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('user:info');
                 this.$router.push({
                   name: 'home'
                 });
-                _context.next = 14;
+                _context.next = 13;
                 break;
 
-              case 11:
-                _context.prev = 11;
+              case 10:
+                _context.prev = 10;
                 _context.t0 = _context["catch"](2);
                 _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('modal:error:show', _context.t0.response.data.message);
 
-              case 14:
+              case 13:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[2, 11]]);
+        }, _callee, this, [[2, 10]]);
       }));
 
       function login() {
@@ -2468,6 +2518,7 @@ __webpack_require__.r(__webpack_exports__);
     _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('modal:error:show', this.showError);
     _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('modal:message:show', this.showMessage);
     _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('token:update', this.tokenUpdate);
+    _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('token:clear', this.tokenClear);
     _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('loader:show', function () {
       return _this.$refs.loader.show();
     });
@@ -2497,6 +2548,9 @@ __webpack_require__.r(__webpack_exports__);
 
       vue_cookies__WEBPACK_IMPORTED_MODULE_1___default.a.set('auth', data.access_token);
       window.axios.defaults.headers.common.Authorization = 'Bearer ' + data.access_token;
+    },
+    tokenClear: function tokenClear() {
+      delete window.axios.defaults.headers.common.Authorization;
     }
   }
 });
@@ -2706,24 +2760,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   message: 'You are singed in'
                 });
                 _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('token:update', result.data);
-                _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('user:info');
                 this.$router.push({
                   name: 'home'
                 });
-                _context.next = 15;
+                _context.next = 14;
                 break;
 
-              case 12:
-                _context.prev = 12;
+              case 11:
+                _context.prev = 11;
                 _context.t0 = _context["catch"](2);
                 _eventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('modal:error:show', _context.t0.response.data.message);
 
-              case 15:
+              case 14:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[2, 12]]);
+        }, _callee, this, [[2, 11]]);
       }));
 
       function signup() {
@@ -23506,7 +23559,7 @@ var render = function() {
         { staticClass: "collapse navbar-collapse", attrs: { id: "menu" } },
         [
           _c("ul", { staticClass: "navbar-nav mr-auto" }, [
-            _vm.newGameAvailable
+            _vm.isNewGameAvailable
               ? _c("li", { staticClass: "nav-item active" }, [
                   _c(
                     "a",
@@ -23524,7 +23577,21 @@ var render = function() {
           _vm.user
             ? _c("ul", { staticClass: "navbar-nav" }, [
                 _c("li", { staticClass: "nav-item" }, [
-                  _vm._v(_vm._s(this.user.name))
+                  _c("span", { staticClass: "nav-link" }, [
+                    _vm._v(_vm._s(this.user.name))
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("li", { staticClass: "nav-item" }, [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "nav-link",
+                      attrs: { href: "#" },
+                      on: { click: _vm.logout }
+                    },
+                    [_vm._v("Log out")]
+                  )
                 ])
               ])
             : _vm._e()
@@ -39932,6 +39999,7 @@ __webpack_require__.r(__webpack_exports__);
   }
 }, {
   path: '/login',
+  name: 'login',
   component: _components_login__WEBPACK_IMPORTED_MODULE_1__["default"]
 }, {
   path: '/signup',
