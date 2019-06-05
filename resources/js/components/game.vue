@@ -20,8 +20,10 @@
 
 <script>
     import EventBus from '../eventBus';
+    import ErrorHandler from '../mixins/error';
 
     export default {
+        mixins: [ErrorHandler],
         data: () => ({
             elements: [],
             draggable: false,
@@ -48,7 +50,7 @@
                     EventBus.$emit('loader:hide');
                 } catch(error) {
                     EventBus.$emit('loader:hide');
-                    EventBus.$emit('modal:error:show', error.response.data.message);
+                    this.errorHandler(error);
                 }
             },
             async newGame() {
@@ -62,7 +64,7 @@
                     EventBus.$emit('loader:hide');
                 } catch (error) {
                     EventBus.$emit('loader:hide');
-                    EventBus.$emit('modal:error:show', error.response.data.message)
+                    this.errorHandler(error);
                 }
             },
             updateElements(elements) {
@@ -92,7 +94,7 @@
                     });
                     EventBus.$emit('elements:draggable:off');
                 } catch (error) {
-                    EventBus.$emit('modal:error:show', error.response.data.message)
+                    this.errorHandler(error);
                 }
             }
         }

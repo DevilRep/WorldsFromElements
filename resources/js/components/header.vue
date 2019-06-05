@@ -29,8 +29,10 @@
 <script>
     import EventBus from '../eventBus';
     import VueCookies from 'vue-cookies';
+    import ErrorHandler from '../mixins/error';
 
     export default {
+        mixins: [ErrorHandler],
         data: () => ({
             newGameAvailable: false,
             user: null
@@ -44,6 +46,7 @@
             EventBus.$on('game:new:on', this.enableNewGame);
             EventBus.$on('game:new:off', this.disableNewGame);
             EventBus.$on('user:info', this.loadUserInfo);
+            EventBus.$on('user:clear', this.clearUserInfo);
         },
         methods: {
             newGame() {
@@ -66,15 +69,18 @@
                     let result = await window.axios.get('/api/user/info');
                     this.user = result.data;
                 } catch (error) {
-                    EventBus.$emit('modal:error:show', error.response.data.message);
+                    this.errorHandler(error);
                 }
             },
             async logout() {
                 await window.axios.post('/api/user/logout');
+                this.clearUserInfo();
+                this.$router.push({ name: 'login' });
+            },
+            clearUserInfo() {
                 this.user = null;
                 VueCookies.remove('auth');
                 EventBus.$emit('token:clear');
-                this.$router.push({ name: 'login' });
             }
         }
     }
