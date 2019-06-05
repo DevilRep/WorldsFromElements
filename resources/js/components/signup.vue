@@ -34,9 +34,10 @@
 <script>
     import EventBus from '../eventBus';
     import Login from '../mixins/login';
+    import ErrorHandler from '../mixins/error';
 
     export default {
-        mixins: [Login],
+        mixins: [Login, ErrorHandler],
         data: () => ({
             name: ''
         }),
@@ -63,7 +64,7 @@
                     EventBus.$emit('token:update', result.data);
                     this.$router.push({name: 'home'});
                 } catch (error) {
-                    EventBus.$emit('modal:error:show', error.response.data.message);
+                    this.errorHandler(error);
                 }
             }
         }

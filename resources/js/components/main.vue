@@ -12,7 +12,7 @@
 
     export default {
         created() {
-            EventBus.$on('modal:error:show', this.showError);
+            EventBus.$on('modal:error:show', this.errorHandler);
             EventBus.$on('modal:message:show', this.showMessage);
             EventBus.$on('token:update', this.tokenUpdate);
             EventBus.$on('token:clear', this.tokenClear);
@@ -24,7 +24,7 @@
             EventBus.$emit('router:load:check');
         },
         methods: {
-            showError(error) {
+            errorHandler(error) {
                 this.showMessage({
                     type: 'error',
                     title: 'Error!',
