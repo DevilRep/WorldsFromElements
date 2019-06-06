@@ -1,7 +1,8 @@
 <template>
     <div class="container">
         <router-view></router-view>
-        <vue-modal ref="modal"></vue-modal>
+        <vue-modal ref="modalSuccess"></vue-modal>
+        <vue-modal ref="modalError"></vue-modal>
         <vue-loader ref="loader"></vue-loader>
     </div>
 </template>
@@ -25,16 +26,18 @@
         },
         methods: {
             errorHandler(error) {
-                this.showMessage({
-                    type: 'error',
-                    title: 'Error!',
-                    message: error
-                });
+                this.$refs.modalError
+                    .init({
+                        type: 'error',
+                        title: 'Error!',
+                        message: error
+                    })
+                    .open();
             },
             showMessage(data) {
-                this.$refs.modal
+                this.$refs.modalSuccess
                     .init(data)
-                    .open()
+                    .open();
             },
             tokenUpdate(data) {
                 if (!data.access_token) {
